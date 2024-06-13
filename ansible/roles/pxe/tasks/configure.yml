@@ -1,0 +1,22 @@
+---
+
+- name: copy pxeboot file to tftp serve directory
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/srv/tftp/{{ item | basename }}"
+    remote_src: true
+  loop: "{{ pxelinux_files_served_by_tftp }}"
+
+- name: create pxe default menu
+  ansible.builtin.copy:
+    src: pxelinux.cfg/default
+    dest: "/srv/tftp/{{ item | basename }}"
+  loop: "{{ pxelinux_files_served_by_tftp }}"
+
+- name: update tftpd defaults
+  ansible.builtin.lineinfile:
+    path: /etc/default/tftpd-hpa
+    regexp: '^TFTP_OPTIONS='
+    line: STFTP_OPTIONS="--secure --verbose"
+  notify:
+    - restart tftpd

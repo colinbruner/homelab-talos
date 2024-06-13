@@ -1,0 +1,12 @@
+[all]
+192.168.1.4
+
+[all:vars]
+ansible_ssh_user=colin
+
+[pxe]
+192.168.1.4
+
+[pxe:vars]
+# https://docs.ansible.com/ansible-core/2.17/reference_appendices/interpreter_discovery.html
+ansible_python_interpreter=auto_silent

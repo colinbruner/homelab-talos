@@ -1,0 +1,16 @@
+---
+# NOTE: This playbook typically requires a SUDO Password
+- hosts: all
+  become: true
+  tasks:
+  - name: update sudoers for NOPASSWD sudo
+    ansible.builtin.copy:
+      content: |
+        colin ALL=(ALL) NOPASSWD: ALL
+      dest: /etc/sudoers.d/colin
+
+    # Breakdown to Ubuntu specific role?
+  - name: update packages to latest version
+    ansible.builtin.apt:
+      name: "*"
+      state: latest

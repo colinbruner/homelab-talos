@@ -1,0 +1,25 @@
+---
+# defaults file for pxe
+packages:
+  - tftpd-hpa # serves pxeboot menu, files, vmlinuz, etc
+  - nginx     # serves ISOs
+  - syslinux 
+  - pxelinux 
+  - nfs-common # mounting nfs share
+
+directories:
+  # contains pxelinux configurations
+  - /srv/tftp/pxelinux.cfg
+  # contains vmlinuz, initrd, etc
+  - /srv/tftp/images/ubuntu
+  # contains isos
+  - /srv/http/images/
+
+pxe_server_ip: "192.168.1.4"
+
+# default pxelinux files to copy and serve via tftp
+pxelinux_files_served_by_tftp:
+  - /usr/lib/PXELINUX/pxelinux.0
+  - /usr/lib/syslinux/modules/bios/ldlinux.c32
+  - /usr/lib/syslinux/modules/bios/menu.c32
+  - /usr/lib/syslinux/modules/bios/libutil.c32

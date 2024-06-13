@@ -1,0 +1,6 @@
+---
+# handlers file for pxe
+- name: restart tftpd
+  ansible.builtin.service:
+    name: tftpd-hpa
+    state: restarted

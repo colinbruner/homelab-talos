@@ -10,8 +10,7 @@
 - name: create pxe default menu
   ansible.builtin.copy:
     src: pxelinux.cfg/default
-    dest: "/srv/tftp/{{ item | basename }}"
-  loop: "{{ pxelinux_files_served_by_tftp }}"
+    dest: "/srv/tftp/pxelinux.cfg/default"
 
 - name: update tftpd defaults
   ansible.builtin.lineinfile:

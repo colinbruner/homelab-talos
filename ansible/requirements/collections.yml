@@ -1,0 +1,4 @@
+---
+collections:
+# Used for Mount function in PXE Role
+- ansible.posix

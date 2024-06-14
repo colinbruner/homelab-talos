@@ -15,6 +15,14 @@ Using WSL with Ansible will require installing SSH private key locally.
 $ ansible-playbook -i inv --ask-become-pass bootstrap.yml
 ```
 
+# Requirements
+
+Require the Ansible's posix collection for utilities such as mounting NFS drives
+
+```bash
+$ ansible-galaxy collection install -r requirements/galaxy.yml
+```
+
 # Install
 
 ```bash

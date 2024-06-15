@@ -17,8 +17,10 @@ directories:
 
 # IP Address or DNS for PXE Server (tftp, nginx)
 pxe_server_addr: "192.168.1.4"
+# The NGINX root path to serve images from
+pxe_http_root_path: "/srv/http"
 # The path on the PXE server to mount 'nfs_server_share_path'
-pxe_nfs_share_path: "/srv/http/images"
+pxe_nfs_share_path: "{{ pxe_http_root_path }}/images"
 # The path to copy vmlinuz, initrd, etc
 pxe_tftp_boot_path: "/srv/tftp/images"
 

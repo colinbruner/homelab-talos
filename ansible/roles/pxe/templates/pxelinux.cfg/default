@@ -1,0 +1,9 @@
+UI menu.c32
+
+LABEL Install Ubuntu 22.04.4 server
+    KERNEL images/ubuntu/22.04.4/vmlinuz
+    INITRD images/ubuntu/22.04.4/initrd
+    APPEND root=/dev/ram0 ip=dhcp cloud-init=disabled url=http://{{ pxe_server_addr }}/images/ubuntu-22.04.4-live-server-amd64.iso
+
+LABEL Boot from disk
+    LOCALBOOT 0

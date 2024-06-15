@@ -8,7 +8,7 @@
   loop: "{{ pxelinux_files_served_by_tftp }}"
 
 - name: create pxe default menu
-  ansible.builtin.copy:
+  ansible.builtin.template:
     src: pxelinux.cfg/default
     dest: "/srv/tftp/pxelinux.cfg/default"
 
@@ -16,6 +16,18 @@
   ansible.builtin.lineinfile:
     path: /etc/default/tftpd-hpa
     regexp: '^TFTP_OPTIONS='
-    line: STFTP_OPTIONS="--secure --verbose"
+    line: TFTP_OPTIONS="--secure --verbose"
   notify:
     - restart tftpd
+
+- name: create nginx images route
+  ansible.builtin.template:
+    src: nginx/images
+    dest: /etc/nginx/sites-available/images
+
+- name: enable nginx images route
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/images
+    dest: /etc/nginx/sites-enabled/images
+    state: link
+  notify: reload nginx

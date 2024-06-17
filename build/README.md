@@ -18,3 +18,8 @@ $ sudo apt-get install liblzma-dev -y
 # Build - will produce 'bin/undionly.kpxe'
 $ ./build.sh
 ```
+
+Manually (for now) move this to expected ansible file location
+```bash
+$ mv build/bin/undionly.kpxe ansible/roles/pxe/files/
+```

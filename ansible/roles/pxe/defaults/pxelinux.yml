@@ -1,0 +1,27 @@
+###
+# NOTE: The values for pxelinux are NOT used in favor of ipxe.
+###
+
+# these packages provide pxelinux files to serve over tftp
+pxelinux_packages:
+  - syslinux 
+  - pxelinux 
+
+pxelinux_directories:
+  # contains pxelinux configurations
+  - /srv/tftp/pxelinux.cfg
+
+# default pxelinux installed files to copy and serve via tftp
+pxelinux_bios_files_served_by_tftp:
+  - /usr/lib/PXELINUX/lpxelinux.0
+  - /usr/lib/syslinux/modules/bios/ldlinux.c32
+  - /usr/lib/syslinux/modules/bios/menu.c32
+  - /usr/lib/syslinux/modules/bios/libutil.c32
+
+# NOTE: Some of these conflict with the above, only 1 should be used.
+pxelinux_uefi_files_served_by_tftp:
+  - /usr/lib/PXELINUX/lpxelinux.0
+  - /usr/lib/syslinux/modules/efi64/ldlinux.e64
+  - /usr/lib/syslinux/modules/efi64/libutil.c32
+  - /usr/lib/syslinux/modules/efi64/menu.c32
+  - /usr/lib/syslinux/modules/efi64/vesamenu.c32

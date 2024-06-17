@@ -6,11 +6,6 @@ packages:
   - nginx      # serves ISOs
   - nfs-common # mounting nfs share
 
-# these packages provide pxelinux files to serve over tftp
-pxelinux_packages:
-  - syslinux 
-  - pxelinux 
-
 # these packages provide ipxe files to serve over tftp
 ipxe_packages:
   - ipxe
@@ -18,8 +13,6 @@ ipxe_packages:
   - shim-signed
 
 directories:
-  # contains pxelinux configurations
-  - /srv/tftp/pxelinux.cfg
   # contains vmlinuz, initrd, etc
   - /srv/tftp/images
   # files served by NGINX (e.g. ISOs)
@@ -39,24 +32,9 @@ nfs_server_addr: "192.168.1.5"
 # The NFS Server Share to mount locally to PXE Server
 nfs_server_share_path: "/share/images"
 
-# default pxelinux installed files to copy and serve via tftp
-pxelinux_bios_files_served_by_tftp:
-  - /usr/lib/PXELINUX/lpxelinux.0
-  - /usr/lib/syslinux/modules/bios/ldlinux.c32
-  - /usr/lib/syslinux/modules/bios/menu.c32
-  - /usr/lib/syslinux/modules/bios/libutil.c32
-
-# NOTE: Some of these conflict with the above, only 1 should be used.
-pxelinux_uefi_files_served_by_tftp:
-  - /usr/lib/PXELINUX/lpxelinux.0
-  - /usr/lib/syslinux/modules/efi64/ldlinux.e64
-  - /usr/lib/syslinux/modules/efi64/libutil.c32
-  - /usr/lib/syslinux/modules/efi64/menu.c32
-  - /usr/lib/syslinux/modules/efi64/vesamenu.c32
-
 # default ipxe installed files to copy and serve via tftp
 ipxe_files_served_by_tftp:
-  - /usr/lib/ipxe/undionly.kpxe
+  #- /usr/lib/ipxe/undionly.kpxe # NOTE: Custom built, installed from files/undionly.kpxe
   - /usr/lib/ipxe/ipxe.efi
   - /usr/lib/ipxe/snponly.efi
 

@@ -11,4 +11,4 @@
   # if only relying on 1, this can be tweaked
 - name: install required packages
   ansible.builtin.apt:
-    pkg: "{{ packages + pxelinux_packages + ipxe_packages }}"
+    pkg: "{{ packages + ipxe_packages }}"

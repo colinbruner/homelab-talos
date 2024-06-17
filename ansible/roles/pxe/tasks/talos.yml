@@ -10,15 +10,18 @@
     state: directory
     mode: '0755'
   loop: "{{ talos_linux_architectures }}"
+  notify: restart tftpd
 
 - name: download talos vmlinuz
   ansible.builtin.get_url:
     url: https://github.com/siderolabs/talos/releases/download/{{ talos_linux_version }}/vmlinuz-{{ item }}
     dest: /srv/tftp/images/talos/{{ talos_linux_version }}/{{ item }}/vmlinuz
   loop: "{{ talos_linux_architectures }}"
+  notify: restart tftpd
 
 - name: download talos initramfs
   ansible.builtin.get_url:
     url: https://github.com/siderolabs/talos/releases/download/{{ talos_linux_version }}/initramfs-{{ item }}.xz 
     dest: /srv/tftp/images/talos/{{ talos_linux_version }}/{{ item }}/initramfs.xz
   loop: "{{ talos_linux_architectures }}"
+  notify: restart tftpd

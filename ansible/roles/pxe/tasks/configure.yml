@@ -1,31 +1,37 @@
 ---
 
 # TODO: chown as tftp user
-- name: copy pxeboot file to tftp serve directory
+- name: install ipxe files
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "/srv/tftp/{{ item | basename }}"
     owner: tftp
     group: tftp
     remote_src: true
-  #loop: "{{ ipxe_files_served_by_tftp + grub_files_served_by_tftp }}"
-  #loop: "{{ pxelinux_uefi_files_served_by_tftp }}"
-  loop: "{{ pxelinux_bios_files_served_by_tftp }}"
+  loop: "{{ ipxe_files_served_by_tftp + grub_files_served_by_tftp }}"
 
-- name: create pxe default menu
-  ansible.builtin.template:
-    src: pxelinux.cfg/default
-    dest: "/srv/tftp/pxelinux.cfg/default"
+  # NOTE: see top level build/README.md for more
+- name: install custom undionly.kpxe file
+  ansible.builtin.copy:
+    src: undionly.kpxe 
+    dest: /srv/tftp/
     owner: tftp
     group: tftp
+  notify: restart tftpd
+
+- name: template boot.ipxe
+  ansible.builtin.template:
+    src: ipxe/boot.ipxe
+    dest: /srv/http/boot.ipxe
+    owner: root
+    group: root
 
 - name: update tftpd defaults
   ansible.builtin.lineinfile:
     path: /etc/default/tftpd-hpa
     regexp: '^TFTP_OPTIONS='
     line: TFTP_OPTIONS="--secure --verbose"
-  notify:
-    - restart tftpd
+  notify: restart tftpd
 
 - name: create nginx images route
   ansible.builtin.template:

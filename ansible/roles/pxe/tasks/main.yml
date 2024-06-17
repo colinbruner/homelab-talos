@@ -8,3 +8,6 @@
 
 - name: mount
   ansible.builtin.include_tasks: mount.yml
+
+- name: talos
+  ansible.builtin.include_tasks: talos.yml

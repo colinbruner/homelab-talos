@@ -43,5 +43,56 @@ TODO
 ### Download Config
 TODO
 
+## Patching
+For full documentation and some examples, see [patching][patching]
+
+### Live Machines
+This is editting the configuration of a machine(s) as it is running live.
+
+#### Strategic Merge Patching
+```bash
+NODE_IP=192.168.1.10 # Target controlplane IP Address
+# Patch live running machineconfig (mc)
+talosctl patch mc \
+  --talosconfig config/talosconfig \
+  -e $NODE_IP \
+  -n $NODE_IP \
+  --patch @patches/network.yaml
+patched MachineConfigs.config.talos.dev/v1alpha1 at the node 192.168.1.10
+Applied configuration without a reboot
+```
+
+#### RFC6902 (JSON Patches)
+```bash
+talosctl patch mc \
+  --talosconfig config/talosconfig \
+  -e $NODE_IP \
+  -n $NODE_IP \
+  --patch @patches/ns.yaml
+patched MachineConfigs.config.talos.dev/v1alpha1 at the node 192.168.1.10
+Applied configuration without a reboot
+```
+
+
+### Configuration Files
+This is type of patching is effectively just editting a local file. These configurations changes will still need to be applied to running instance(s).
+
+```bash
+NODE_IP=192.168.1.10 # Target controlplane IP Address
+# Patch generated machine configuration, requires local files
+talosctl machineconfig patch \
+  --talosconfig config/talosconfig \
+  -n $NODE_IP \
+  -e $NODE_IP \
+  --patch @patches/network.yaml \
+    config/controlplane.yaml
+```
+
 ## Links:
-- https://www.talos.dev/v1.7/introduction/getting-started/#apply-configuration
+- [Applying Configuration][apply]
+- [Patching][patching]
+- [Troubleshooting][troubleshooting]
+
+[apply]: https://www.talos.dev/v1.7/introduction/getting-started/#apply-configuration
+[patching]: https://www.talos.dev/v1.7/talos-guides/configuration/patching/
+[troubleshooting]: https://www.talos.dev/v1.7/introduction/troubleshooting/

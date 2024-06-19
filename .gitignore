@@ -1,2 +1,5 @@
 # locally built files
 build/bin/*
+
+# generated talos configuration files
+talos/config/*

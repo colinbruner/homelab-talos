@@ -1,0 +1,52 @@
+---
+###
+# Existing running configuration of a Talos Node
+###
+machine:
+  network:
+    hostname: talos-x841l
+    nameservers:
+      - 192.168.1.1
+---
+###
+# Patch or merging configuration
+###
+machine:
+  network:
+    hostname: worker-01
+    nameservers:
+      - 9.9.9.9
+    interfaces:
+      - deviceSelector:
+          busPath: "0*" # should select any hardware network device, if you have just one, it will be selected
+        addresses:
+          - 192.168.1.10/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.1.1
+  time:
+    servers:
+      - time.cloudflare.com
+---
+###
+# Result
+###
+machine:
+  network:
+    hostname: worker-01 # NOTE: Updated
+    nameservers:        # NOTE: Appended
+      - 192.168.1.1
+      - 9.9.9.9
+    interfaces:
+      - deviceSelector:
+          busPath: "0*" # should select any hardware network device, if you have just one, it will be selected
+        addresses:
+          - 192.168.1.20/24 # TODO: Template
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.1.1
+  time:
+    servers:
+      - time.cloudflare.com

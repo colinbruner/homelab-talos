@@ -34,6 +34,8 @@ talosctl gen secrets -o $OUTPUT_DIR/$SECRETS_FILE
 # Generate configuration
 talosctl gen config \
   --output $OUTPUT_DIR \
+  --with-docs=false \
+  --with-examples=false \
   --with-secrets="$OUTPUT_DIR/$SECRETS_FILE" \
   $CLUSTER_NAME \
   https://$NODE_IP:6443

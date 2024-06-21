@@ -1,10 +1,10 @@
 #!/bin/bash -e
 
-NODE_IP=${1} # NOTE: This is the IP Address the inital node comes online as
+NODE_IP=${1}                    # The IP Address of the node to configure
+CONFIG_FILE="${2:-worker.yaml}" # The config file within outputs directory to pass to the node
 
 # Consts
 OUTPUT_DIR="./config"
-CONTROLPLANE_FILE="controlplane.yaml"
 
 function sanity() {
   if [[ -z $NODE_IP ]]; then
@@ -15,6 +15,6 @@ function sanity() {
 sanity
 
 talosctl apply-config \
-    --insecure \
-    -n $NODE_IP \
-    --file ${OUTPUT_DIR}/${CONTROLPLANE_FILE}
+  --insecure \
+  -n $NODE_IP \
+  --file ${OUTPUT_DIR}/${CONFIG_FILE}

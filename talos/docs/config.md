@@ -20,9 +20,10 @@ The templates directory contains two sub-directories, each with two sets of temp
 - worker/strategic-patch.yaml
 - worker/json-patch.yaml
 
-
-
+These templates are used to generic either strategic or json patches for Talos control or worker nodes. For more information about strategic/json patching types, refer to [patching](./patching.md).
 
 ### Values
+
+These files define individual unique characteristics, such as IP or hostname. The files are organized by the unique 'name' of the node, ending in `.yaml`. These files should fill in the keys defined in the [schema.yml](../values/schema.yml) file.
 
 [schema]: https://carvel.dev/ytt/docs/v0.49.x/how-to-write-schema/

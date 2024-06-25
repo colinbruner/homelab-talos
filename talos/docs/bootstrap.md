@@ -20,26 +20,29 @@ The following two sections will apply to both control & worker nodes.
 Running the below script from the [talos/](../) directory will generate configuration for bootstraping a Talos cluster.
 
 ```bash
-# generate configuration for a single control node
-$ ./scripts/generate-config.sh
+# generate configuration for a control-01 node, writes a file called control-01.yaml in config/ directory
+$ ./scripts/generate-config.sh -t control -e 192.168.1.10 -n control-01 -c homelab
 ```
 
 After bootstrapping, you'll also want to generate configuration for worker nodes. These configuration files are saved in a (config/workers/)[../configs/workers/] directory.
 
 ```bash
-$ ./scripts/generate-config.sh
+# generate configuration for a worker-01 node, writes a file called worker-01.yaml in config/workers/ directory
+$ ./scripts/generate-config.sh -t worker -e 192.168.1.199 -n worker-01
 ```
 
 ### Apply Configs
 Running the below script from the [talos/](../) directory will apply configuration and begin bootstraping a Talos cluster.
 
 ```bash
-$ ./scripts/apply-config.sh
+# applies configuration based upon a generated control-01.yaml file
+$ ./scripts/apply-config.sh -t control -e 192.168.1.10 -n control-01
 ```
 
 The script below will apply configuration to a new worker node.
 ```bash
-$ ./scripts/apply-config.sh
+# applies configuration based upon a generated worker-01.yaml file
+$ ./scripts/apply-config.sh -t worker -e 192.168.1.199 -n worker-01
 ```
 
 ## Control Only (bootstrapping)
@@ -49,14 +52,16 @@ The following section applies only to the initial bootstrapping process of a sin
 Once Talos Linux is up and online, you'll need to bootstrap kubernetes. The following script will bootstrap your kubernetes cluster.
 
 ```bash
-$ ./scripts/bootstrap-kubernetes.sh
+# bootstraps the kubernetes cluster on running Talos Linux, this will only need to be done once
+$ ./scripts/bootstrap-kubernetes.sh -e 192.168.1.10
 ```
 
 ### Download Configs
 Now that the Talos cluster and kubernetes are both up and online, you'll need to download the kubeconfig for authenticating to your new kubernetes cluster.
 
 ```bash
-$ ./scripts/download-config.sh
+# downloads the kubeconfig in the config/ directory, this file should be kept secret and save
+$ ./scripts/download-config.sh -e 192.168.1.10
 ```
 
 [gc]: ../scripts/generate-config.sh

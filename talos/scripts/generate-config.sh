@@ -44,6 +44,7 @@ function generate_controller() {
       --output $TALOSCONFIG_FILE \
       $CLUSTER_NAME \
       https://$ENDPOINT:6443
+  fi
 }
 
 function generate_worker() {

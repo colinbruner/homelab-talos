@@ -1,0 +1,7 @@
+#@data/values-schema
+---
+
+#! NOTE: This defines the type schema expected for files within values/ directory
+
+hostname: ""    #! str
+addresses: [""] #! list[str]

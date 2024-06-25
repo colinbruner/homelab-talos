@@ -1,0 +1,18 @@
+machine:
+  network:
+    hostname: control-01
+    nameservers:
+    - 192.168.1.1
+    - 9.9.9.9
+    interfaces:
+    - deviceSelector:
+        busPath: 0*
+      addresses:
+      - 192.168.1.20/24
+      mtu: 1500
+      routes:
+      - network: 0.0.0.0/0
+        gateway: 192.168.1.1
+  time:
+    servers:
+    - time.cloudflare.com

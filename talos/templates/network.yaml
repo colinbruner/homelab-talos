@@ -1,14 +1,17 @@
+#@ load("@ytt:data", "data")
+
+#! This defines the base network template for all nodes
+
 machine:
   network:
-    hostname: worker-01 # TODO: Template
+    hostname: #@ data.values.hostname
     nameservers:
       - 192.168.1.1
       - 9.9.9.9
     interfaces:
       - deviceSelector:
-          busPath: "0*" # should select any hardware network device, if you have just one, it will be selected
-        addresses:
-          - 192.168.1.20/24 # TODO: Template
+          busPath: "0*" #! should select any hardware network device, if you have just one, it will be selected
+        addresses: #@ data.values.addresses
         mtu: 1500
         routes:
           - network: 0.0.0.0/0

@@ -1,9 +1,0 @@
-- op: replace
-  path: /machine/network/nameservers
-  value:
-    - 192.168.1.1
-    - 9.9.9.9
-- op: replace
-  path: /machine/network/interfaces/0/addresses
-  value:
-    - 192.168.1.20/24

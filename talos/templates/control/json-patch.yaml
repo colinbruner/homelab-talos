@@ -1,0 +1,8 @@
+#@ load("@ytt:data", "data")
+- op: replace
+  path: /cluster/controlPlane/endpoint
+  value: #@ "https://{}:6443".format(data.values.addresses[0].split("/")[0])
+- op: replace
+  path: /cluster/apiServer/certSANs
+  value: 
+    - #@ data.values.addresses[0].split("/")[0]

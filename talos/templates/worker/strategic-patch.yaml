@@ -1,6 +1,6 @@
 #@ load("@ytt:data", "data")
 
-#! This defines the base network template for all nodes
+#! This defines the strategic merge configurations for all worker nodes
 
 machine:
   network:

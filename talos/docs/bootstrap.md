@@ -20,19 +20,26 @@ The following two sections will apply to both control & worker nodes.
 Running the below script from the [talos/](../) directory will generate configuration for bootstraping a Talos cluster.
 
 ```bash
-# generate configuration for a control-01 node, writes a file called control-01.yaml in config/ directory
-$ ./scripts/generate-config.sh -t control -e 192.168.1.10 -n control-01 -c homelab
+# generate configuration to bootstrap controlplane
+$ ./scripts/generate-config.sh -t control -n control-01 -e 192.168.1.157 -c homelab
+creating: homelab/talos/patches/strategic-patch.yaml
+creating: homelab/talos/patches/json-patch.yaml
+creating: homelab/talos/scripts/../config/secrets.yaml
+creating: homelab/talos/scripts/../config/control-01.yaml
+creating: homelab/talos/scripts/../config/talosconfig
 ```
 
 After bootstrapping, you'll also want to generate configuration for worker nodes. These configuration files are saved in a (config/workers/)[../configs/workers/] directory.
 
 ```bash
-# generate configuration for a worker-01 node, writes a file called worker-01.yaml in config/workers/ directory
-$ ./scripts/generate-config.sh -t worker -e 192.168.1.199 -n worker-01
+# generate configuration to bootstrap worker nodes
+$ ./scripts/generate-config.sh -t worker -n worker-01 -e 192.168.1.201
+creating: homelab/talos/patches/worker-01/strategic-patch.yaml
+creating: homelab/talos/scripts/../config/workersworker-01.yaml
 ```
 
 ### Apply Configs
-Running the below script from the [talos/](../) directory will apply configuration and begin bootstraping a Talos cluster.
+Running the below script from the [talos/](../) directory will apply configuration and begin bootstraping a Talos cluster control node.
 
 ```bash
 # applies configuration based upon a generated control-01.yaml file

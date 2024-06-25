@@ -3,3 +3,6 @@ build/bin/*
 
 # generated talos configuration files
 talos/config/*
+
+# generated talos patch files
+talos/patches/*

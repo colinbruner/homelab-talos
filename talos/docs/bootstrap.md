@@ -119,6 +119,27 @@ waiting for all k8s nodes to report schedulable: ...
 waiting for all k8s nodes to report schedulable: OK
 ```
 
+## Example Worker Setup
+After creating 3 values files for worker-01, worker-02, and worker-03 in the values/ directory...
+
+```bash
+# Generating Configurations
+$ ./scripts/generate-config.sh -t worker -n worker-01 -e 192.168.1.22
+creating: /home/colinbruner/code/colinbruner/homelab/talos/patches/worker-01/strategic-patch.yaml
+creating: /home/colinbruner/code/colinbruner/homelab/talos/scripts/../config/workersworker-01.yaml
+$ ./scripts/generate-config.sh -t worker -n worker-02 -e 192.168.1.176
+creating: /home/colinbruner/code/colinbruner/homelab/talos/patches/worker-02/strategic-patch.yaml
+creating: /home/colinbruner/code/colinbruner/homelab/talos/scripts/../config/workersworker-02.yaml
+$ ./scripts/generate-config.sh -t worker -n worker-03 -e 192.168.1.173
+creating: /home/colinbruner/code/colinbruner/homelab/talos/patches/worker-03/strategic-patch.yaml
+creating: /home/colinbruner/code/colinbruner/homelab/talos/scripts/../config/workersworker-03.yaml
+
+# Applying Configurations
+$ ./scripts/apply-config.sh -t worker -e 192.168.1.22 -n worker-01
+$ ./scripts/apply-config.sh -t worker -e 192.168.1.176 -n worker-02
+$ ./scripts/apply-config.sh -t worker -e 192.168.1.173 -n worker-03
+```
+
 [gc]: ../scripts/generate-config.sh
 [ac]: ../scripts/apply-config.sh
 [bk]: ../scripts/bootstrap-kubernetes.sh

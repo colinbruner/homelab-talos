@@ -1,13 +1,15 @@
 # Talos
+I've documented the initial bootstrapping of a single control node + three worker nodes, all running as VMs on Proxmox. 
 
-Additional documentation about various steps and components:
+This documentation is captured below in the following components:
 - [Bootstrap](./docs/bootstrap.md)
 - [Config](./docs/config.md)
+- [Patching](./docs/patching.md)
 
 ## Directories
 
 - [config](./config/): generated configuration for Talos control and worker nodes.
-- [docs](./docs/): documentation about bootstraping and configuring Talos Linux.
+- [docs](./docs/): documentation about bootstrapping and configuring Talos Linux.
 - [patches](./patches/): patches that have been geneated by [scripts](./scripts) to apply to Talos Linux.
 - [scripts](./scripts/): contains scripts intended to be ran from this directory.
 - [templates](./templates/): yaml templates consumed by scripts to generate [patches](./patches/).

@@ -1,23 +1,30 @@
-# Bootstraping
+# bootstrapping
 
 ## Overview
-The bootstraping process is handled with 4 scripts defined in the [scripts/](./scripts) directory. This process will handle bootstraping a single control node followed by worker nodes.
+The bootstrapping process is handled with 4 scripts defined in the [scripts/](./scripts) directory. This process will handle bootstrapping a single control node followed by n+ worker nodes.
 
 - [generate-config.sh][gc]
 - [apply-config.sh][ac]
 - [bootstrap-kubernetes.sh][bk]
 - [download-config.sh][dc]
 
+## Prerequisites
+The scripts mention above assume a few binaries are available within your running PATH. Please ensure the following are downloaded and executable:
+- [talosctl](https://github.com/siderolabs/talos)
+- [ytt](https://github.com/carvel-dev/ytt)
+
+While not strictly required for bootstrapping, `kubectl` is also recommended to interact and validate the cluster after bootstrap.
+
 ## Configuration
-Before bootstraping, confirm your desired configuration is set. This can be done by reviewing files in the [values](../values) and [templates/](../templates) directories.
+Before bootstrapping, confirm your desired configuration is set. This can be done by reviewing files in the [values](../values) and [templates/](../templates) directories.
 
 For more information, view [configuration](./config.md).
 
 ## Control & Worker
-The following two sections will apply to both control & worker nodes.
+The following two sections will apply to both control & worker nodes. However, please run through ALL control node sections before beginning on worker nodes.
 
 ### Generate Configs
-Running the below script from the [talos/](../) directory will generate configuration for bootstraping a Talos cluster.
+Running the below script from the [talos/](../) directory will generate configuration for bootstrapping a Talos cluster.
 
 The primary files generated here are `secrets.yaml`, `talosconfig`, and `control-01.yaml`, the file of which is named after the `-n` input name of the node.
 ```bash
@@ -31,7 +38,6 @@ creating: homelab/talos/scripts/../config/talosconfig
 ```
 
 #### Worker
-
 After bootstrapping, you'll also want to generate configuration for worker nodes. These configuration files are saved in a (config/workers/)[../configs/workers/] directory.
 
 ```bash
@@ -42,7 +48,7 @@ creating: homelab/talos/scripts/../config/workersworker-01.yaml
 ```
 
 ### Apply Configs
-Running the below script from the [talos/](../) directory will apply configuration and begin bootstraping a Talos cluster control node.
+Running the below script from the [talos/](../) directory will apply configuration and begin bootstrapping a Talos cluster control node.
 
 The below script will cause the initial control node to be reconfigured. After this happens, the node will remain in a 'Booting' stage until the following bootstrap configurations can be applied. Refer to [Bootstrap Kubernetes][#bootstrap kubernetes] section below.
 ```bash

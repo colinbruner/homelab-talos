@@ -44,7 +44,7 @@ After bootstrapping, you'll also want to generate configuration for worker nodes
 # generate configuration to bootstrap worker nodes
 $ ./scripts/generate-config.sh -t worker -n worker-01 -e 192.168.1.201
 creating: homelab/talos/patches/worker-01/strategic-patch.yaml
-creating: homelab/talos/scripts/../config/workersworker-01.yaml
+creating: homelab/talos/scripts/../config/workers/worker-01.yaml
 ```
 
 ### Apply Configs
@@ -52,15 +52,15 @@ Running the below script from the [talos/](../) directory will apply configurati
 
 The below script will cause the initial control node to be reconfigured. After this happens, the node will remain in a 'Booting' stage until the following bootstrap configurations can be applied. Refer to [Bootstrap Kubernetes][#bootstrap kubernetes] section below.
 ```bash
-# applies configuration based upon a generated control-01.yaml file
-$ ./scripts/apply-config.sh -t control -e 192.168.1.10 -n control-01
+# applies initial bootstrap configuration based upon a generated control-01.yaml file
+$ ./scripts/apply-config.sh -b -t control -e 192.168.1.10 -n control-01
 ```
 
 #### Worker
 The script below will apply configuration to a new worker node.
 ```bash
-# applies configuration based upon a generated worker-01.yaml file
-$ ./scripts/apply-config.sh -t worker -e 192.168.1.199 -n worker-01
+# applies initial bootstrap configuration based upon a generated worker-01.yaml file
+$ ./scripts/apply-config.sh -b -t worker -e 192.168.1.199 -n worker-01
 ```
 
 ## Control Only (bootstrapping)
@@ -141,9 +141,9 @@ creating: /home/colinbruner/code/colinbruner/homelab/talos/patches/worker-03/str
 creating: /home/colinbruner/code/colinbruner/homelab/talos/scripts/../config/workersworker-03.yaml
 
 # Applying Configurations
-$ ./scripts/apply-config.sh -t worker -e 192.168.1.22 -n worker-01
-$ ./scripts/apply-config.sh -t worker -e 192.168.1.176 -n worker-02
-$ ./scripts/apply-config.sh -t worker -e 192.168.1.173 -n worker-03
+$ ./scripts/apply-config.sh -b -t worker -e 192.168.1.22 -n worker-01
+$ ./scripts/apply-config.sh -b -t worker -e 192.168.1.176 -n worker-02
+$ ./scripts/apply-config.sh -b -t worker -e 192.168.1.173 -n worker-03
 ```
 
 [gc]: ../scripts/generate-config.sh

@@ -12,7 +12,8 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 usage() { echo "Usage: $0 [-t <control|worker>] [-e <endpoint>] [-n <name>]" 1>&2; exit 1; }
 
-while getopts ":t:e:n:" o; do
+EXTRA_ARGS=""
+while getopts ":t:e:n:b" o; do
     case "${o}" in
         t)
             t=${OPTARG}
@@ -23,6 +24,10 @@ while getopts ":t:e:n:" o; do
             ;;
         n)
             n=${OPTARG}
+            ;;
+        b)
+            # During initial bootstrapping, --insecure must be passed
+            EXTRA_ARGS="--insecure "
             ;;
         *)
             usage
@@ -41,12 +46,12 @@ NODE_NAME=$n
 
 if [[ $NODE_TYPE == "control" ]]; then
   talosctl apply-config \
-    --insecure \
     -n $NODE_IP \
+    $EXTRA_ARGS \
     --file ${OUTPUT_DIR}/${NODE_NAME}.yaml
 else
   talosctl apply-config \
-    --insecure \
     -n $NODE_IP \
+    $EXTRA_ARGS \
     --file ${WORKER_OUTPUT_DIR}/${NODE_NAME}.yaml
 fi

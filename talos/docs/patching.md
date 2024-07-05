@@ -57,5 +57,21 @@ talosctl machineconfig patch \
     config/controlplane.yaml
 ```
 
+### Script Example
+This type of patching can be handle by regenerating configuration files originally generated during [bootstrapping](./bootstrap.md).
+
+```bash
+# Supplying '-f' will force overwrite any existing configuration files
+$ ./scripts/generate-config.sh -t worker -n worker-01 -e 192.168.1.22 -f
+# NOTE: Before running, I copied the original worker-01.yaml to my existing directory
+# After rerunning, we see additional changes now reflected.
+$ diff worker-01.yaml config/workers/worker-01.yaml
+12a13,14
+>         extraArgs:
+>             rotate-server-certificates: "true"
+
+# Apply
+```
+
 [strategic]: https://www.talos.dev/v1.7/talos-guides/configuration/patching/#strategic-merge-patches
 [rfc6902]: https://www.talos.dev/v1.7/talos-guides/configuration/patching/#rfc6902-json-patches

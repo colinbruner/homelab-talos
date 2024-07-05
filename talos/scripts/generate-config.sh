@@ -13,7 +13,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 mkdir -p $WORKER_OUTPUT_DIR
 mkdir -p $PATCHES_DIR
 
-usage() { echo "Usage: $0 [-t <control|worker>] [-n <name>] [-e <endpoint>] [-c <cluster>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-t <control|worker>] [-n <name>] [-e <endpoint>] [-c <cluster>] [-f]" 1>&2; exit 1; }
 
 function generate_controller() {
   if [[ ! -f $SECRETS_FILE ]]; then
@@ -33,6 +33,7 @@ function generate_controller() {
     --config-patch-control-plane @${STRATEGIC_PATCH} \
     --config-patch-control-plane @${JSON_PATCH} \
     --output ${OUTPUT_DIR}/${NODE_NAME}.yaml \
+    $EXTRA_ARGS \
     $CLUSTER_NAME \
     https://$ENDPOINT:6443 2>/dev/null
 
@@ -51,7 +52,7 @@ function generate_controller() {
 }
 
 function generate_worker() {
-  echo "creating: ${WORKER_OUTPUT_DIR}${NODE_NAME}.yaml"
+  echo "creating: ${WORKER_OUTPUT_DIR}/${NODE_NAME}.yaml"
   talosctl gen config \
     --with-secrets="$SECRETS_FILE" \
     --with-docs=false \
@@ -60,6 +61,7 @@ function generate_worker() {
     --config-patch-worker @${STRATEGIC_PATCH} \
     --config-patch-worker @${JSON_PATCH} \
     --output ${WORKER_OUTPUT_DIR}/${NODE_NAME}.yaml \
+    $EXTRA_ARGS \
     $CLUSTER_NAME \
     https://$ENDPOINT:6443 2>/dev/null
 }
@@ -67,7 +69,8 @@ function generate_worker() {
 ###
 # parse args
 ###
-while getopts ":t:e:n:c:" o; do
+EXTRA_ARGS=""
+while getopts ":t:e:n:c:f" o; do
     case "${o}" in
         t)
             t=${OPTARG}
@@ -82,6 +85,9 @@ while getopts ":t:e:n:c:" o; do
         c)
             c=${OPTARG}
             ;;
+        f)
+          EXTRA_ARGS+="--force "
+            ;;
         *)
             usage
             ;;
@@ -90,7 +96,7 @@ done
 shift $((OPTIND-1))
 
 if [ -z "${t}" ] || [ -z "${n}" ] || [ -z "${e}" ]; then
-    usage
+  usage
 fi
 
 ###

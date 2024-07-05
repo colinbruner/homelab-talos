@@ -3,6 +3,11 @@
 #! This defines the strategic merge configurations for all worker nodes
 
 machine:
+  kubelet:
+    extraArgs:
+      #! NOTE: This enables metrics server to recognize kubelet certificates
+      #! https://www.talos.dev/v1.7/kubernetes-guides/configuration/deploy-metrics-server/
+      rotate-server-certificates: true
   network:
     hostname: #@ data.values.hostname
     nameservers:

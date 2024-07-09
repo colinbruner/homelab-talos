@@ -10,7 +10,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 . ${SCRIPTPATH}/lib/consts.sh
 
-usage() { echo "Usage: $0 [-t <control|worker>] [-e <endpoint>] [-n <name>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-t <control|worker>] [-e <endpoint>] [-n <name>] [-b]" 1>&2; exit 1; }
 
 EXTRA_ARGS=""
 while getopts ":t:e:n:b" o; do
@@ -44,14 +44,14 @@ NODE_TYPE=$t
 NODE_IP=$e
 NODE_NAME=$n
 
-if [[ $NODE_TYPE == "control" ]]; then
-  talosctl apply-config \
-    -n $NODE_IP \
-    $EXTRA_ARGS \
-    --file ${OUTPUT_DIR}/${NODE_NAME}.yaml
+# Set location of target output dir based on node type
+if [[ $NODE_TYPE == "worker" ]]; then
+  TARGET_OUTPUT_DIR="${WORKER_OUTPUT_DIR}"
 else
-  talosctl apply-config \
-    -n $NODE_IP \
-    $EXTRA_ARGS \
-    --file ${WORKER_OUTPUT_DIR}/${NODE_NAME}.yaml
+  TARGET_OUTPUT_DIR="${OUTPUT_DIR}"
 fi
+
+talosctl apply-config \
+  -n $NODE_IP \
+  $EXTRA_ARGS \
+  --file ${TARGET_OUTPUT_DIR}/${NODE_NAME}.yaml

@@ -50,7 +50,7 @@ creating: homelab/talos/scripts/../config/workers/worker-01.yaml
 ### Apply Configs
 Running the below script from the [talos/](../) directory will apply configuration and begin bootstrapping a Talos cluster control node.
 
-The below script will cause the initial control node to be reconfigured. After this happens, the node will remain in a 'Booting' stage until the following bootstrap configurations can be applied. Refer to [Bootstrap Kubernetes][#bootstrap kubernetes] section below.
+The below script will cause the initial control node to be reconfigured. After this happens, the node will remain in a 'Booting' stage with 'Ready' indicating `False`, until the following bootstrap configurations can be applied. Refer to [Bootstrap Kubernetes][#bootstrap kubernetes] section below.
 ```bash
 # applies initial bootstrap configuration based upon a generated control-01.yaml file
 $ ./scripts/apply-config.sh -b -t control -e 192.168.1.10 -n control-01
@@ -61,6 +61,13 @@ The script below will apply configuration to a new worker node.
 ```bash
 # applies initial bootstrap configuration based upon a generated worker-01.yaml file
 $ ./scripts/apply-config.sh -b -t worker -e 192.168.1.199 -n worker-01
+```
+
+Subsequent worker configurations should be applied as follows:
+```bash
+# applies patched configuration based upon a newly generated worker-01.yaml file
+# NOTE: '-e' indicates the current endpoint (IP address) of the worker
+$ ./scripts/apply-config.sh -t worker -e 192.168.1.31 -n worker-01
 ```
 
 ## Control Only (bootstrapping)

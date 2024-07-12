@@ -20,12 +20,36 @@
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
-pushd $SCRIPTPATH/
-git clone https://github.com/prometheus-operator/kube-prometheus.git tmp; pushd tmp
+pushd $SCRIPTPATH/build
+
+# Make sure to start with a clean 'manifests' dir
+function setupManifests() {
+  rm -rf manifests
+  mkdir -p manifests/setup
+}
+
+function setupVendors() {
+  # hardcoded @mail
+  if [[ ! -d vendor ]]; then
+    jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@main
+  else
+    echo "vendor directory exists. Continuing..."
+  fi
+}
+
+function jsonnetBuild() {
+  # Calling gojsontoyaml is optional, but we would like to generate yaml, not json
+  jsonnet -J vendor -m manifests "${1-example.jsonnet}" | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml' -- {}
+}
 
 function createCRDs() {
-  # assumes root of cloned directory
-  for file in manifests/setup/0*.yaml; do
+  local crdSuffix='*CustomResourceDefinition.yaml'
+  # separate CRDs from manifests
+  mv manifests/${crdSuffix} manifests/setup
+
+  set +e # allow non-zero return codes within loop
+  # assumes root of build directory
+  for file in manifests/setup/*.yaml; do
     local crdResource=$(yq ".metadata.name" $file)
     # check if crd exists
     kubectl get $crdResource &>/dev/null
@@ -35,19 +59,28 @@ function createCRDs() {
       echo "CRD: '$crdResource' already exists. Continuing..."
     fi
   done
+  set -e # return to failing on non-zero return codes
+}
+
+function applyManifests() {
+  local path=$1 # e.g. 'manfests/setup'
+  # assumes root of build directory
+  kubectl apply -f $path
 }
 
 function applyRegexManifests() {
-  local regexPath=$1
-  # assumes root of cloned directory
+  local regexPath=$1 # e.g. 'manfests/prom-*.yaml'
+  # assumes root of build directory
   for file in $regexPath; do
-    kubectl apply -f $file; 
+    kubectl apply -f $file
   done
 }
 
 function cleanUp() {
+  # Make sure to remove json files
+  find manifests -type f ! -name '*.yaml' -delete
+  rm -f kustomization
   popd
-  rm -rf $SCRIPTPATH/tmp/
 }
 
 ###
@@ -55,9 +88,13 @@ function cleanUp() {
 ###
 trap cleanUp EXIT
 
+# Generates YAML
+setupManifests
+setupVendors
+jsonnetBuild "prometheus.jsonnet"
+
+# Creates CRDs
 createCRDs
 
-applyRegexManifests "manifests/alertmanager-*.yaml"
-applyRegexManifests "manifests/blackboxExporter-*.yaml"
-applyRegexManifests "manifests/kube*.yaml"
-applyRegexManifests "manifests/prometheus*.yaml"
+# context: we are within the operator/build/ directory
+applyManifests "manifests/"

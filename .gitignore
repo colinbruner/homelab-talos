@@ -6,3 +6,7 @@ talos/config/*
 
 # generated talos patch files
 talos/patches/*
+
+# generated manifests / vendored libs
+**/build/manifests/**
+**/build/vendor/**

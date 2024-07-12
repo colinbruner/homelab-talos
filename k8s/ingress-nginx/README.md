@@ -14,6 +14,16 @@ $ helm repo update
 
 $ helm install ingress-nginx \
   ingress-nginx/ingress-nginx \
+  --values values.yaml \
   --create-namespace \
   --namespace ingress-nginx
+```
+
+## Upgrade
+The following upgrades and redeloys any configuration changes to ingress-nginx.
+
+```bash
+$ helm upgrade ingress-nginx \
+  ingress-nginx/ingress-nginx \
+  --values values.yaml
 ```

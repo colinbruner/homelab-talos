@@ -5,6 +5,7 @@ This documentation is captured below in the following components:
 - [Bootstrap](./docs/bootstrap.md)
 - [Config](./docs/config.md)
 - [Patching](./docs/patching.md)
+- [Upgrading](./docs/upgrading.md)
 
 ## Directories
 

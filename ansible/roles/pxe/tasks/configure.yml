@@ -43,4 +43,4 @@
     src: /etc/nginx/sites-available/images
     dest: /etc/nginx/sites-enabled/images
     state: link
-  notify: reload nginx
+  notify: restart nginx

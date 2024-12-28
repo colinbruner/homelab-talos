@@ -23,7 +23,15 @@ $ ./add-key.sh
 
 We'll need to create an NFS share that will store images to boot off the network with.
 
-This is configurable with `nfs_server_addr` variables in the pxe role
+QNAP Side:
+
+1. Enable NFS Service
+2. Create Shared Folder + Set Guest Access (NOTE: needs to be RW for Ansible image download)
+3. Enable Access Right (see link below)
+
+https://www.qnap.com/en-us/how-to/faq/article/how-to-enable-and-setup-host-access-for-nfs-connection
+
+The location of the NFS Server is configurable with `nfs_server_addr` variables in the pxe role.
 
 ## Bootstrap
 
@@ -43,6 +51,6 @@ $ ansible-galaxy collection install -r requirements/collections.yml
 # Install
 
 ```bash
-#
-$ ansible-playbook -i inv pxe.yml
+# Run Install with specified variables
+$ ansible-playbook -i inv pxe.yml --extra-vars @vars/main.yml
 ```

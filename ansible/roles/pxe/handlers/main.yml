@@ -5,7 +5,7 @@
     name: tftpd-hpa
     state: restarted
 
-- name: reload nginx
+- name: restart nginx
   ansible.builtin.service:
     name: nginx
-    state: reloaded
+    state: restart

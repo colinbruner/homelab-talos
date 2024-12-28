@@ -1,15 +1,15 @@
 ---
 # defaults file for pxe
 packages:
-  - xinetd     # rsyslog and init script utilities
-  - tftpd-hpa  # serves pxeboot menu, files, vmlinuz, etc
-  - nginx      # serves ISOs
+  - xinetd # rsyslog and init script utilities
+  - tftpd-hpa # serves pxeboot menu, files, vmlinuz, etc
+  - nginx # serves ISOs
   - nfs-common # mounting nfs share
 
 # these packages provide ipxe files to serve over tftp
 ipxe_packages:
   - ipxe
-  - grub-efi-amd64-signed 
+  - grub-efi-amd64-signed
   - shim-signed
 
 directories:
@@ -19,7 +19,7 @@ directories:
   - /srv/http
 
 # IP Address or DNS for PXE Server (tftp, nginx)
-pxe_server_addr: "192.168.1.4"
+pxe_server_addr: "192.168.10.4"
 # The NGINX root path to serve images from
 pxe_http_root_path: "/srv/http"
 # The path on the PXE server to mount 'nfs_server_share_path'
@@ -28,9 +28,9 @@ pxe_nfs_share_path: "{{ pxe_http_root_path }}/images"
 pxe_tftp_boot_path: "/srv/tftp/images"
 
 # IP Address or DNS for NFS Server (images/isos)
-nfs_server_addr: "192.168.1.5"
+nfs_server_addr: "192.168.10.5"
 # The NFS Server Share to mount locally to PXE Server
-nfs_server_share_path: "/share/images"
+nfs_server_share_path: "/share/pxe"
 
 # default ipxe installed files to copy and serve via tftp
 ipxe_files_served_by_tftp:

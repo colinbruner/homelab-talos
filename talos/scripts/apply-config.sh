@@ -51,7 +51,7 @@ else
   TARGET_OUTPUT_DIR="${OUTPUT_DIR}"
 fi
 
-talosctl apply-config \
+echo talosctl apply-config \
   -n $NODE_IP \
   $EXTRA_ARGS \
   --file ${TARGET_OUTPUT_DIR}/${NODE_NAME}.yaml

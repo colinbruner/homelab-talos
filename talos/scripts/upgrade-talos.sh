@@ -1,8 +1,5 @@
 #!/bin/bash
 
-IMAGE="ghcr.io/siderolabs/installer"
-IMAGE_VERSION="v1.7.7"
-
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
@@ -10,7 +7,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 usage() { echo "Usage: $0 [-t <control|worker>] [-n <node-ip>]" 1>&2; exit 1; }
 
-while getopts ":t:n:" o; do
+while getopts ":t:n:v:" o; do
     case "${o}" in
         t)
             t=${OPTARG}
@@ -19,6 +16,9 @@ while getopts ":t:n:" o; do
         n)
             n=${OPTARG}
             ;;
+        v)
+            v=${OPTARG}
+            ;;
         *)
             usage
             ;;
@@ -26,15 +26,19 @@ while getopts ":t:n:" o; do
 done
 shift $((OPTIND-1))
 
-if [ -z "${t}" ] || [ -z "${n}" ]; then
+if [ -z "${t}" ] || [ -z "${n}" ] || [ -z "${n}" ]; then
     usage
 fi
 
+## Args
 NODE_TYPE=$t
 NODE_IP=$n
+IMAGE="ghcr.io/siderolabs/installer"
+IMAGE_VERSION=$v
 
 CMD="talosctl upgrade --wait --debug --nodes ${NODE_IP} --image ${IMAGE}:${IMAGE_VERSION}"
 if [[ $NODE_TYPE == "control" ]]; then
+    # NOTE: This is required for a single control node deployment
     CMD+=" --preserve"
 fi
 

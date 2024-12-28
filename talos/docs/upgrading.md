@@ -1,34 +1,56 @@
 # Upgrading
 
+## Kubernetes
 
-## Before Upgrading
-Review the the [official documentation][official]:
+### Before Upgrading
+
+Review the the [official documentation][official-k8s]:
+
+### Upgrading
+
+```bash
+# See diff of changes, no real changes made.. dryrun
+talosctl --nodes control-01 upgrade-k8s --to 1.32.0 --dry-run
+
+# Automated upgrade of control & workers to 1.32.0
+talosctl --nodes control-01 upgrade-k8s --to 1.32.0
+```
+
+## Talos
+
+### Before Upgrading
+
+Review the the [official documentation][official-talos]:
 
 > For example, if upgrading from Talos 1.0 to Talos 1.2.4, the recommended upgrade path would be:
-    > - upgrade from 1.0 to latest patch of 1.0 - to v1.0.6
-    > - upgrade from v1.0.6 to latest patch of 1.1 - to v1.1.2
-    > - upgrade from v1.1.2 to v1.2.4
+>
+> - upgrade from 1.0 to latest patch of 1.0 - to v1.0.6
+> - upgrade from v1.0.6 to latest patch of 1.1 - to v1.1.2
+> - upgrade from v1.1.2 to v1.2.4
 
-## Getting Ready
-1. Edit the [upgrade script](./scripts/upgrade-talos.sh) to specify the version at top.
-2. Run the script on WORKERS first
-3. Run the script on CONTROL node(s) last
+### Getting Ready
 
-## Running the Upgrade
+1. Ensure you're upgrading to a compatible version
+2. Run the script on CONTROL node(s) first
+3. Run the script on wORKERS nodes last
+
+### Running the Upgrade
+
 ```bash
-# Worker Node
-❯ ./scripts/upgrade-talos.sh -t control -n 192.168.1.32
-...
-watching nodes: [192.168.1.32]
-    * 192.168.1.32: post check passed
-
 # Control Node
-❯ ./scripts/upgrade-talos.sh -t control -n 192.168.1.20
+❯ ./scripts/upgrade-talos.sh -t control -n 192.168.1.20 -v v1.8.4
 Will run the following command:
-talosctl upgrade --wait --debug --nodes 192.168.1.20 --image ghcr.io/siderolabs/installer:v1.7.7 --preserve
+talosctl upgrade --wait --debug --nodes 192.168.1.20 --image ghcr.io/siderolabs/installer:v1.8.4 --preserve
 Continue? [y/N] y
 ◲ watching nodes: [192.168.1.20]
     * 192.168.1.20: waiting for actor ID
+
+# Worker Node
+❯ ./scripts/upgrade-talos.sh -t control -n 192.168.1.32 -v v1.8.4
+...
+watching nodes: [192.168.1.32]
+    * 192.168.1.32: post check passed
 ```
 
-[official]: https://www.talos.dev/v1.9/talos-guides/upgrading-talos/#faqs
+[official-talos]: https://www.talos.dev/v1.9/talos-guides/upgrading-talos/#faqs
+[official-k8s]: https://www.talos.dev/v1.9/kubernetes-guides/upgrading-kubernetes/

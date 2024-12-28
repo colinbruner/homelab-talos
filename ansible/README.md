@@ -54,3 +54,9 @@ $ ansible-galaxy collection install -r requirements/collections.yml
 # Run Install with specified variables
 $ ansible-playbook -i inv pxe.yml --extra-vars @vars/main.yml
 ```
+
+# Unifi
+
+Configure Network Boot on the appropriate network with the following:
+
+`{{ pxe_server_addr }} undionly.kpxe`

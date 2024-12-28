@@ -8,6 +8,14 @@ Using WSL with Ansible will require installing SSH private key locally.
 4. Start SSH Agent `eval $(ssh-agent)`
 5. Add Keys `ssh-add ~/.ssh/<key>`
 
+# Add Keys to VM
+Run the following, inspect first to make sure IPs are correct..
+
+```bash
+# Create ~/.ssh and add pubkey to authorized_keys file
+$ ./add-key.sh
+```
+
 # Bootstrap
 
 ```bash

@@ -11,7 +11,7 @@ machine:
   network:
     hostname: #@ data.values.hostname
     nameservers:
-      - 192.168.1.1
+      - 192.168.10.1
       - 9.9.9.9
     interfaces:
       - deviceSelector:
@@ -20,7 +20,7 @@ machine:
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
-            gateway: 192.168.1.1
+            gateway: 192.168.10.1
   time:
     servers:
       - time.cloudflare.com

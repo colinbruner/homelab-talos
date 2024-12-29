@@ -13,7 +13,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 mkdir -p $WORKER_OUTPUT_DIR
 mkdir -p $PATCHES_DIR
 
-usage() { echo "Usage: $0 [-t <control|worker>] [-n <name>] [-e <endpoint>] [-c <cluster>] [-f]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-n <name>] [-e <endpoint>] [-c <cluster>] [-f]" 1>&2; exit 1; }
 
 function generate_controller() {
   if [[ ! -f $SECRETS_FILE ]]; then
@@ -75,10 +75,6 @@ function generate_worker() {
 EXTRA_ARGS=""
 while getopts ":t:e:n:c:f" o; do
     case "${o}" in
-        t)
-            t=${OPTARG}
-            ((t == "control" || t == "worker")) || usage
-            ;;
         e)
             e=${OPTARG}
             ;;
@@ -98,7 +94,7 @@ while getopts ":t:e:n:c:f" o; do
 done
 shift $((OPTIND-1))
 
-if [ -z "${t}" ] || [ -z "${n}" ] || [ -z "${e}" ]; then
+if [ -z "${n}" ] ; then
   usage
 fi
 
@@ -120,10 +116,18 @@ function generate_patch() {
 }
 
 # Input
-NODE_TYPE=$t
 NODE_NAME=$n
-ENDPOINT=$e
-CLUSTER_NAME=${c:-"homelab"}
+if [[ $NODE_NAME =~ control* ]]; then
+  NODE_TYPE="control"
+elif [[ $NODE_NAME =~ worker* ]]; then
+  NODE_TYPE="worker"
+else
+  echo "Node name must start with 'control' or 'worker'. Got: ${NODE_NAME}"
+  exit 1
+fi
+
+ENDPOINT=${e:-$DEFAULT_CLUSTER_ENDPOINT} # NOTE: this is the IP of the controlplane node
+CLUSTER_NAME=${c:-$DEFAULT_CLUSTER_NAME}
 
 # These are 'type' (control|worker) specific templates 
 STRATEGIC_PATCH_TEMPLATE="${TEMPLATES_DIR}/${NODE_TYPE}/strategic-patch.yaml"

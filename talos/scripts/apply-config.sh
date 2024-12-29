@@ -15,10 +15,6 @@ usage() { echo "Usage: $0 [-t <control|worker>] [-e <endpoint>] [-n <name>] [-b]
 EXTRA_ARGS=""
 while getopts ":t:e:n:b" o; do
     case "${o}" in
-        t)
-            t=${OPTARG}
-            ((t == "control" || t == "worker")) || usage
-            ;;
         e)
             e=${OPTARG}
             ;;
@@ -36,19 +32,20 @@ while getopts ":t:e:n:b" o; do
 done
 shift $((OPTIND-1))
 
-if [ -z "${t}" ] || [ -z "${e}" ] || [ -z "${n}" ]; then
+if [ -z "${e}" ] || [ -z "${n}" ]; then
     usage
 fi
 
-NODE_TYPE=$t
 NODE_IP=$e
 NODE_NAME=$n
 
-# Set location of target output dir based on node type
-if [[ $NODE_TYPE == "worker" ]]; then
+if [[ $NODE_NAME =~ control* ]]; then
+  TARGET_OUTPUT_DIR="${OUTPUT_DIR}"
+elif [[ $NODE_NAME =~ worker* ]]; then
   TARGET_OUTPUT_DIR="${WORKER_OUTPUT_DIR}"
 else
-  TARGET_OUTPUT_DIR="${OUTPUT_DIR}"
+  echo "Node name must start with 'control' or 'worker'. Got: ${NODE_NAME}"
+  exit 1
 fi
 
 echo talosctl apply-config \

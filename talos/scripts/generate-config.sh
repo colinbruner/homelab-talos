@@ -20,8 +20,6 @@ function generate_controller() {
     # sanity baked into this command, requires --force to overwrite an existing secrets file.
     echo "creating: ${SECRETS_FILE}"
     talosctl gen secrets -o $SECRETS_FILE 2>/dev/null
-    echo "adding endpoint '${ENDPOINT} configuration to: ${SECRETS_FILE}"
-    talosctl --talosconfig=$SECRETS_FILE config endpoint $ENDPOINT
   fi
 
   # Generate Controlplane 
@@ -50,6 +48,9 @@ function generate_controller() {
       --output $TALOSCONFIG_FILE \
       $CLUSTER_NAME \
       https://$ENDPOINT:6443 2>/dev/null
+
+    echo "adding endpoint '${ENDPOINT} configuration to: ${TALOSCONFIG_FILE}"
+    talosctl --talosconfig=$TALOSCONFIG_FILE config endpoint $ENDPOINT
   fi
 }
 

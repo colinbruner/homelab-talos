@@ -1,0 +1,23 @@
+
+###
+# Control 01
+###
+# where 192.168.10.77 is the initial DHCP leased IP
+DHCP_LEASED_IP="192.168.10.77"
+./scripts/generate-config.sh -t control -n control-01 -e ${DHCP_LEASED_IP} -c homelab
+./scripts/apply-config.sh -b -t control -e ${DHCP_LEASED_IP} -n control-01
+# New static IP starts here
+./scripts/bootstrap-kubernetes.sh -e 192.168.10.20
+./scripts/download-kubeconfig.sh -e 192.168.10.20
+
+# Reference Config then:
+kubectl apply -f https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+###
+# Workers
+###
+# Generate Worker Configs
+./scripts/generate-config.sh -n worker-01
+./scripts/generate-config.sh -n worker-02
+./scripts/generate-config.sh -n worker-03

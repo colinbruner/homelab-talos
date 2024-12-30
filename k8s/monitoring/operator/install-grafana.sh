@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-GRAFANA_CHART_VERSION="v5.10.0"
+GRAFANA_CHART_VERSION="v5.15.1"
 
 # Switch to default ns
 kubens monitoring

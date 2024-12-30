@@ -4,13 +4,21 @@ The subdirectores within this monitoring directory serve the following purpose:
 - operator: installs and configure grafana/prometheus operators.
 - manifests: contains manfiests for deploying, configuring, and managing grafana/prometheus.
 
+## Prerequisites
+
+Install jb and gojsontoyaml, also need jsonnet.. `brew install jsonnet`
+```bash
+go install -a github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
+go install -a github.com/brancz/gojsontoyaml@latest
+```
+
 ## Install Operators
 Operators are cluster scoped and installed in the default namespace. This organizes monitoring operators into a single 'default' namespace and allows for targeted namespace deployments of the actual applications.
 
 Before installing, we need to create the monitoring namespace and initial secrets.
 ```bash
 # Creates k8s namespace 'monitoring' for the following operators and pods to be deployed
-$ kubectl -f apply manifests/namespace.yaml
+$ kubectl apply -f manifests/namespace.yaml && kubens monitoring
 # Creates Grafana app admin username/password as k8s secrets synced from 1Password
 $ kubectl apply -f manifests/1password.yaml
 ```

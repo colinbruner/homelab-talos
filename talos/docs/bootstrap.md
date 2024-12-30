@@ -109,6 +109,8 @@ $ ./scripts/download-config.sh -e 192.168.1.10
 
 ## Errors
 
+Reference [metrics-server][../k8s/metrics-server] README.md
+
 If any kubelet CSR errors are observed, refer to the following link:
 https://www.talos.dev/v1.9/kubernetes-guides/configuration/deploy-metrics-server/#node-configuration
 
@@ -189,4 +191,3 @@ $ ./scripts/apply-config.sh -b -t worker -e 192.168.1.173 -n worker-03
 [ac]: ../scripts/apply-config.sh
 [bk]: ../scripts/bootstrap-kubernetes.sh
 [dc]: ../scripts/download-config.sh
-

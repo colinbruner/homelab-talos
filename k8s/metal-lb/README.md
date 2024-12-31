@@ -6,6 +6,6 @@
 # Inspect configuration
 $ kubectl kustomize
 
-# Apply
+# Apply Configurations
 $ kubectl apply -k .
 ```

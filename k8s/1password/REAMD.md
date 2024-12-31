@@ -9,7 +9,7 @@ https://developer.1password.com/docs/connect/get-started/?deploy-type=kubernetes
 $ read -s OP_CONNECT_TOKEN && export OP_CONNECT_TOKEN=<token>
 
 # Create deployment namespace
-$ kubectl apply -f namespace.yml
+$ kubectl apply -k .
 
 # Add helm repo
 $ helm repo add 1password https://1password.github.io/connect-helm-charts/

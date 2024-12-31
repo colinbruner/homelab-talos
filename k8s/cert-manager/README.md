@@ -4,28 +4,20 @@ depends on:
 
 ## Install
 
-```bash
-# Install Repo
-$ helm repo add jetstack https://charts.jetstack.io --force-update
+Currently, installing this all via Helm works. 
 
-# Deploy
-$ helm install \
-  cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --create-namespace \
-  --version v1.15.1 \
-  --set crds.enabled=true
+I'd love to get this into kustomize, but there is an issue with including CRDs.
+```bash
+# Runs 'helm repo add' and 'helm install'
+$ ./install.sh
 ```
 
-## LetsEncrypt Integration
-We create a k8s secret in 1password containing a cloudflare API token used to manipulate our target DNS zone.
-
+Installs custom resources for generating certificates.
 ```bash
-# Deploy 1password -> k8s secret
-$ kubectl apply -f secret.yaml
-
-$ kubectl apply -f letsencrypt-staging.yaml
-$ kubectl apply -f letsencrypt-prod.yaml
+# View Configuraton
+$ kustomize build --enable-helm
+# Apply Configurations
+$ kustomize build --enable-helm | kubectl -f -
 ```
 
 ## Requesting a Certificate

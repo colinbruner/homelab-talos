@@ -10,7 +10,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 . ${SCRIPTPATH}/lib/consts.sh
 
-usage() { echo "Usage: $0 [-t <control|worker>] [-e <endpoint>] [-n <name>] [-b]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-e <endpoint>] [-n <name>] [-b]" 1>&2; exit 1; }
 
 EXTRA_ARGS=""
 while getopts ":t:e:n:b" o; do
@@ -48,7 +48,7 @@ else
   exit 1
 fi
 
-echo talosctl apply-config \
+talosctl apply-config \
   -n $NODE_IP \
   $EXTRA_ARGS \
   --file ${TARGET_OUTPUT_DIR}/${NODE_NAME}.yaml

@@ -1,5 +1,6 @@
 ---
 
+# TODO: change to .21
 hostname: control-01
 addresses: 
   - 192.168.10.20/24

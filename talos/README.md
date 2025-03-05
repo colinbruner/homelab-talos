@@ -1,7 +1,9 @@
 # Talos
-I've documented the initial bootstrapping of a single control node + three worker nodes, all running as VMs on Proxmox. 
+
+I've documented the initial bootstrapping of a single control node + three worker nodes, all running as VMs on Proxmox.
 
 This documentation is captured below in the following components:
+
 - [Bootstrap](./docs/bootstrap.md)
 - [Config](./docs/config.md)
 - [Patching](./docs/patching.md)
@@ -17,6 +19,7 @@ This documentation is captured below in the following components:
 - [values](./values/): files, by hostname, containing specific values for that worker or control node.
 
 ## Official Links:
+
 - [Applying Configuration][apply]
 - [Patching][patching]
 - [Troubleshooting][troubleshooting]

@@ -1,11 +1,15 @@
 # Patching
+
 For full documentation and some examples, see [patching][patching].
 
 ## Live Machines
+
 This is editting the configuration of a machine(s) as it is running live.
 
 ### Types of Patches
+
 Talos supports two types of patches:
+
 - [Strategic Merge][strategic]
 - [JSON Patches (RFC6902)][rfc6902]
 
@@ -14,6 +18,7 @@ Strategic merging allows merging 1 yaml configuration file into another. For non
 JSON Patching allows more fine grained control of various aspects of the configuration.
 
 #### Strategic Merging
+
 ```bash
 # Target controlplane IP Address
 NODE_IP=192.168.1.10
@@ -29,6 +34,7 @@ Applied configuration without a reboot
 ```
 
 #### JSON Patches (RFC6902)
+
 ```bash
 # Target controlplane IP Address
 NODE_IP=192.168.1.10
@@ -44,6 +50,7 @@ Applied configuration without a reboot
 ```
 
 ## Configuration File Patching
+
 This type of patching is effectively just editting a local file. These configurations changes will still need to be applied to running instance(s).
 
 ```bash
@@ -58,11 +65,12 @@ talosctl machineconfig patch \
 ```
 
 ### Script Example
+
 This type of patching can be handle by regenerating configuration files originally generated during [bootstrapping](./bootstrap.md).
 
 ```bash
 # Supplying '-f' will force overwrite any existing configuration files
-$ ./scripts/generate-config.sh -t worker -n worker-01 -e 192.168.1.22 -f
+$ ./scripts/generate-config.sh -n worker-01 -e 192.168.1.22 -f
 # NOTE: Before running, I copied the original worker-01.yaml to my existing directory
 # After rerunning, we see additional changes now reflected.
 $ diff worker-01.yaml config/workers/worker-01.yaml

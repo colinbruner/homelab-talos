@@ -1,0 +1,5 @@
+---
+
+hostname: control-02
+addresses: 
+  - 192.168.10.22/24

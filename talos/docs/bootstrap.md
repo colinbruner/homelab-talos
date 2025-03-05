@@ -44,6 +44,18 @@ creating: homelab/talos/scripts/../config/control-01.yaml
 creating: homelab/talos/scripts/../config/talosconfig
 ```
 
+### Adding New Control Nodes
+
+```bash
+# NOTE: set -e to the intended future IP address of the node
+$ ./scripts/generate-config.sh -n control-02 -e 192.168.10.22 -c homelab
+creating: homelab/talos/patches/control-02/strategic-patch.yaml
+creating: homelab/talos/patches/control-02/json-patch.yaml
+creating: homelab/talos/scripts/../config/control-02.yaml
+# NOTE: This -e is the IP address of the node at time of apply
+$ ./scripts/apply-config.sh -b -e 192.168.10.172 -n control-02
+```
+
 #### Worker
 
 After bootstrapping, you'll also want to generate configuration for worker nodes. These configuration files are saved in a (config/workers/)[../configs/workers/] directory.
@@ -63,7 +75,7 @@ The below script will cause the initial control node to be reconfigured. After t
 
 ```bash
 # applies initial bootstrap configuration based upon a generated control-01.yaml file
-$ ./scripts/apply-config.sh -b -t control -e 192.168.1.10 -n control-01
+$ ./scripts/apply-config.sh -b -e 192.168.1.10 -n control-01
 ```
 
 #### Worker
@@ -72,7 +84,7 @@ The script below will apply configuration to a new worker node.
 
 ```bash
 # applies initial bootstrap configuration based upon a generated worker-01.yaml file
-$ ./scripts/apply-config.sh -b -t worker -e 192.168.1.199 -n worker-01
+$ ./scripts/apply-config.sh -b -e 192.168.1.199 -n worker-01
 ```
 
 Subsequent worker configurations should be applied as follows:
@@ -80,7 +92,7 @@ Subsequent worker configurations should be applied as follows:
 ```bash
 # applies patched configuration based upon a newly generated worker-01.yaml file
 # NOTE: '-e' indicates the current endpoint (IP address) of the worker
-$ ./scripts/apply-config.sh -t worker -e 192.168.1.31 -n worker-01
+$ ./scripts/apply-config.sh -e 192.168.1.31 -n worker-01
 ```
 
 ## Control Only (bootstrapping)
@@ -182,9 +194,9 @@ creating: /home/colinbruner/code/colinbruner/homelab/talos/patches/worker-03/str
 creating: /home/colinbruner/code/colinbruner/homelab/talos/scripts/../config/workersworker-03.yaml
 
 # Applying Configurations
-$ ./scripts/apply-config.sh -b -t worker -e 192.168.1.22 -n worker-01
-$ ./scripts/apply-config.sh -b -t worker -e 192.168.1.176 -n worker-02
-$ ./scripts/apply-config.sh -b -t worker -e 192.168.1.173 -n worker-03
+$ ./scripts/apply-config.sh -b -e 192.168.1.22 -n worker-01
+$ ./scripts/apply-config.sh -b -e 192.168.1.176 -n worker-02
+$ ./scripts/apply-config.sh -b -e 192.168.1.173 -n worker-03
 ```
 
 [gc]: ../scripts/generate-config.sh

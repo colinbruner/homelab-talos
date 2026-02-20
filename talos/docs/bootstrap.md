@@ -84,7 +84,8 @@ The script below will apply configuration to a new worker node.
 
 ```bash
 # applies initial bootstrap configuration based upon a generated worker-01.yaml file
-$ ./scripts/apply-config.sh -b -e 192.168.1.199 -n worker-01
+# NOTE: '-e' indicates the current endpoint (IP address) of the worker
+$ ./scripts/apply-config.sh -b -e 192.168.10.199 -n worker-01
 ```
 
 Subsequent worker configurations should be applied as follows:
@@ -92,7 +93,7 @@ Subsequent worker configurations should be applied as follows:
 ```bash
 # applies patched configuration based upon a newly generated worker-01.yaml file
 # NOTE: '-e' indicates the current endpoint (IP address) of the worker
-$ ./scripts/apply-config.sh -e 192.168.1.31 -n worker-01
+$ ./scripts/apply-config.sh -e 192.168.10.31 -n worker-01
 ```
 
 ## Control Only (bootstrapping)

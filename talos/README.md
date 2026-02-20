@@ -9,6 +9,34 @@ This documentation is captured below in the following components:
 - [Patching](./docs/patching.md)
 - [Upgrading](./docs/upgrading.md)
 
+## Regenerating Kubeconfig & Talosconfig
+Refer to the Talos discussion [here](https://github.com/siderolabs/talos/discussions/9457). 
+
+Secrets for control nodes are in 1password along with current talosconfig, secrets, and kubeconfig. However, these generated certs do expire.
+
+Overview as follows:
+```bash
+# OSX
+# Extract the CA cert + key from the control plane config
+yq -r .machine.ca.crt control-02.yaml | base64 -d > ca.crt
+yq -r .machine.ca.key control-02.yaml | base64 -d > ca.key
+
+# Generate fresh credentials
+talosctl gen key --name admin
+talosctl gen csr --key admin.key --ip 127.0.0.1
+talosctl gen crt --ca ca --csr admin.csr --name admin
+
+# Update existing `talosconfig` with the new values
+# NOTE: edit the talosconfig for each step
+# For ca: cat ca.crt | base64 | pbcopy
+# For crt: cat admin.crt | base64 | pbcopy
+# For key: cat admin.key | base64 | pbcopy
+vim talosconfig
+
+# Finally, generate new Kubeconfig.
+talosctl kubeconfig -n 192.168.10.20 -e ... --talosconfig ./talosconfig
+```
+
 ## Directories
 
 - [config](./config/): generated configuration for Talos control and worker nodes.

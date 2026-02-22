@@ -25,6 +25,7 @@ This repository manages a **Talos Linux Kubernetes cluster** running on Proxmox 
 
 **Network:** 192.168.10.0/24, Gateway: 192.168.10.1, DNS: 192.168.10.1 / 9.9.9.9
 **Pod CIDR:** 10.244.0.0/16 | **Service CIDR:** 10.96.0.0/12
+**Cluster endpoint:** `talos.bruner.lab` (DNS A record pointing to all 3 control plane IPs)
 
 ---
 
@@ -48,13 +49,15 @@ This repository manages a **Talos Linux Kubernetes cluster** running on Proxmox 
 
 All scripts live in `./scripts/` and source `./scripts/lib/consts.sh` for shared defaults.
 
-| Script                    | Purpose                                                        |
-|---------------------------|----------------------------------------------------------------|
-| `generate-config.sh`      | Renders ytt templates into per-node patches and machine configs |
-| `apply-config.sh`         | Applies machine configs to nodes via `talosctl`                |
-| `bootstrap-kubernetes.sh` | One-time Kubernetes bootstrap on the first control plane node  |
-| `download-config.sh`      | Fetches `kubeconfig` from the control plane                    |
-| `upgrade-talos.sh`        | Upgrades Talos OS on a single node; prompts for confirmation   |
+| Script                       | Purpose                                                        |
+|------------------------------|----------------------------------------------------------------|
+| `generate-config.sh`         | Renders ytt templates into per-node patches and machine configs |
+| `apply-config.sh`            | Applies machine configs to nodes via `talosctl`                |
+| `bootstrap-kubernetes.sh`    | One-time Kubernetes bootstrap on the first control plane node  |
+| `download-config.sh`         | Fetches `kubeconfig` from the control plane                    |
+| `upgrade-talos.sh`           | Upgrades Talos OS on a single node; prompts for confirmation   |
+| `upgrade-kubernetes.sh`      | Upgrades Kubernetes cluster-wide via `talosctl upgrade-k8s`    |
+| `regenerate-talosconfig.sh`  | Regenerates `config/talosconfig` and installs to `~/.talos/config` |
 
 ### upgrade-talos.sh Usage
 

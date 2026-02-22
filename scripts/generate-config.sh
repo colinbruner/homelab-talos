@@ -126,7 +126,7 @@ else
   exit 1
 fi
 
-ENDPOINT=${e:-$DEFAULT_CLUSTER_ENDPOINT} # NOTE: this is the IP of the controlplane node
+ENDPOINT=${e:-$DEFAULT_CLUSTER_ENDPOINT} # NOTE: DNS name or IP of the cluster endpoint
 CLUSTER_NAME=${c:-$DEFAULT_CLUSTER_NAME}
 
 # These are 'type' (control|worker) specific templates 

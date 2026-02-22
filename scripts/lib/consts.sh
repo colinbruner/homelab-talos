@@ -19,4 +19,4 @@ KUBECONFIG_FILE="${OUTPUT_DIR}/kubeconfig"
 ###
 # These are cluster defaults when not provided.
 DEFAULT_CLUSTER_NAME="homelab"
-DEFAULT_CLUSTER_ENDPOINT="192.168.10.20"
+DEFAULT_CLUSTER_ENDPOINT="talos.bruner.lab"

@@ -1,13 +1,6 @@
 .DS_Store**
-# locally built files
-build/bin/*
 
 # generated talos configuration files
-talos/config/*
-
+config/*
 # generated talos patch files
-talos/patches/*
-
-# generated manifests / vendored libs
-**/build/manifests/**
-**/build/vendor/**
+patches/*

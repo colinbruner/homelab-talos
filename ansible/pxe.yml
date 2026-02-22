@@ -1,3 +1,0 @@
-- hosts: pxe
-  roles:
-    - { role: pxe, become: true }

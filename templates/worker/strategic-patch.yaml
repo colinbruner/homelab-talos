@@ -26,6 +26,5 @@ machine:
       - time.cloudflare.com
 cluster:
   controlPlane:
-    #! NOTE: In a greater than single node deployment, this should be a DNS name
     #! https://www.talos.dev/v1.7/reference/configuration/v1alpha1/config/#Config.cluster.controlPlane.endpoint
-    endpoint: https://192.168.10.20:6443
+    endpoint: https://talos.bruner.lab:6443

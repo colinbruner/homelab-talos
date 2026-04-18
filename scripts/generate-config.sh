@@ -13,7 +13,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 mkdir -p $WORKER_OUTPUT_DIR
 mkdir -p $PATCHES_DIR
 
-usage() { echo "Usage: $0 [-n <name>] [-e <endpoint>] [-c <cluster>] [-f]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-n <name>] [-e <endpoint>] [-c <cluster>] [-k <kubernetes-version>]" 1>&2; exit 1; }
 
 function generate_controller() {
   if [[ ! -f $SECRETS_FILE ]]; then
@@ -29,13 +29,14 @@ function generate_controller() {
     --with-secrets="$SECRETS_FILE" \
     --with-docs=false \
     --with-examples=false \
+    --kubernetes-version=$KUBERNETES_VERSION \
     --output-types controlplane \
     --config-patch-control-plane @${STRATEGIC_PATCH} \
-    --config-patch-control-plane @${JSON_PATCH} \
+    --config-patch-control-plane @${FIREWALL_TEMPLATE} \
     --output ${OUTPUT_DIR}/${NODE_NAME}.yaml \
     $EXTRA_ARGS \
     $CLUSTER_NAME \
-    https://$ENDPOINT:6443 2>/dev/null
+    https://$ENDPOINT:6443
 
   if [[ ! -f $TALOSCONFIG_FILE ]]; then
     echo "creating: ${TALOSCONFIG_FILE}"
@@ -47,7 +48,7 @@ function generate_controller() {
       --output-types talosconfig \
       --output $TALOSCONFIG_FILE \
       $CLUSTER_NAME \
-      https://$ENDPOINT:6443 2>/dev/null
+      https://$ENDPOINT:6443
 
     echo "adding endpoint '${ENDPOINT} configuration to: ${TALOSCONFIG_FILE}"
     talosctl --talosconfig=$TALOSCONFIG_FILE config endpoint $ENDPOINT
@@ -60,9 +61,10 @@ function generate_worker() {
     --with-secrets="$SECRETS_FILE" \
     --with-docs=false \
     --with-examples=false \
+    --kubernetes-version=$KUBERNETES_VERSION \
     --output-types worker \
     --config-patch-worker @${STRATEGIC_PATCH} \
-    --config-patch-worker @${JSON_PATCH} \
+    --config-patch-worker @${FIREWALL_TEMPLATE} \
     --output ${WORKER_OUTPUT_DIR}/${NODE_NAME}.yaml \
     $EXTRA_ARGS \
     $CLUSTER_NAME \
@@ -72,8 +74,8 @@ function generate_worker() {
 ###
 # parse args
 ###
-EXTRA_ARGS=""
-while getopts ":t:e:n:c:f" o; do
+EXTRA_ARGS="--force "
+while getopts ":t:e:n:c:k:" o; do
     case "${o}" in
         e)
             e=${OPTARG}
@@ -84,8 +86,8 @@ while getopts ":t:e:n:c:f" o; do
         c)
             c=${OPTARG}
             ;;
-        f)
-          EXTRA_ARGS+="--force "
+        k)
+            k=${OPTARG}
             ;;
         *)
             usage
@@ -110,9 +112,6 @@ function generate_patch() {
     --data-values-file ${VALUES_DIR}/${NODE_NAME}.yaml \
     --output-files ${NODE_PATCH_DIR}
 
-  # NOTE: This is a hack. If there is no JSON template file provided, a patch file will NOT be generated.
-  # This will cause errors as we feed these patch files to 'generate_controller' and 'generate_worker' functions.
-  touch $JSON_PATCH # Ensures JSON_PATCH file always exists, empty or otherwise.
 }
 
 # Input
@@ -128,6 +127,7 @@ fi
 
 ENDPOINT=${e:-$DEFAULT_CLUSTER_ENDPOINT} # NOTE: DNS name or IP of the cluster endpoint
 CLUSTER_NAME=${c:-$DEFAULT_CLUSTER_NAME}
+KUBERNETES_VERSION=${k:-$DEFAULT_KUBERNETES_VERSION}
 
 # These are 'type' (control|worker) specific templates 
 STRATEGIC_PATCH_TEMPLATE="${TEMPLATES_DIR}/${NODE_TYPE}/strategic-patch.yaml"

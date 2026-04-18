@@ -8,20 +8,17 @@ This repository manages a **Talos Linux Kubernetes cluster** running on Proxmox 
 
 ## Cluster Topology
 
-| Role          | Hostname     | IP              |
-|---------------|-------------|-----------------|
-| Control Plane | control-01  | 192.168.10.20   |
-| Control Plane | control-02  | 192.168.10.22   |
-| Control Plane | control-03  | 192.168.10.23   |
+| Role          | Hostname     | IP                                    |
+|---------------|-------------|---------------------------------------|
+| Control Plane | control-01  | 192.168.10.21                         |
+| Control Plane | control-02  | 192.168.10.22                         |
+| Control Plane | control-03  | 192.168.10.23                         |
 | Worker        | worker-01   | 192.168.10.31   |
 | Worker        | worker-02   | 192.168.10.32   |
 | Worker        | worker-03   | 192.168.10.33   |
 | Worker        | worker-04   | 192.168.10.34   |
 | Worker        | worker-05   | 192.168.10.35   |
 | Worker        | worker-06   | 192.168.10.36   |
-| Worker        | worker-07   | 192.168.10.37   |
-| Worker        | worker-08   | 192.168.10.38   |
-| Worker        | worker-09   | 192.168.10.39   |
 
 **Network:** 192.168.10.0/24, Gateway: 192.168.10.1, DNS: 192.168.10.1 / 9.9.9.9
 **Pod CIDR:** 10.244.0.0/16 | **Service CIDR:** 10.96.0.0/12
@@ -140,6 +137,7 @@ For sequential upgrades across all workers, use the **Talos Worker Upgrade** ski
 
 ## Conventions
 
+- **Line endings:** Always use LF (`\n`), never CRLF (`\r\n`). This is a macOS development environment.
 - Node hostnames follow `{control,worker}-{01..09}` (zero-padded)
 - IPs: control plane starts at `.20`, workers start at `.31`
 - Patches are always generated, never hand-edited directly (edit templates instead)

@@ -9,7 +9,6 @@ machine:
       #! https://www.talos.dev/v1.7/kubernetes-guides/configuration/deploy-metrics-server/
       rotate-server-certificates: true
   network:
-    hostname: #@ data.values.hostname
     nameservers:
       - 192.168.10.1
       - 9.9.9.9
@@ -28,3 +27,10 @@ cluster:
   controlPlane:
     #! https://www.talos.dev/v1.7/reference/configuration/v1alpha1/config/#Config.cluster.controlPlane.endpoint
     endpoint: https://talos.bruner.lab:6443
+---
+#! HostnameConfig is required in Talos v1.12+ when stableHostname is active (default).
+#! Setting auto: "off" allows an explicit hostname to be used without conflict.
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: #@ data.values.hostname
+auto: "off"

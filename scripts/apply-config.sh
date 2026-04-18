@@ -10,10 +10,10 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 . ${SCRIPTPATH}/lib/consts.sh
 
-usage() { echo "Usage: $0 [-e <endpoint>] [-n <name>] [-b]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-e <endpoint>] [-n <name>] [-b] [-d]" 1>&2; exit 1; }
 
 EXTRA_ARGS=""
-while getopts ":t:e:n:b" o; do
+while getopts ":t:e:n:bd" o; do
     case "${o}" in
         e)
             e=${OPTARG}
@@ -24,6 +24,10 @@ while getopts ":t:e:n:b" o; do
         b)
             # During initial bootstrapping, --insecure must be passed
             EXTRA_ARGS="--insecure "
+            ;;
+        d)
+            # Dry-run: show diff without applying
+            EXTRA_ARGS+="--dry-run "
             ;;
         *)
             usage

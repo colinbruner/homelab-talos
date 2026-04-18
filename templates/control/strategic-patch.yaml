@@ -3,13 +3,13 @@
 #! This defines the strategic merge configurations for all control nodes
 
 machine:
+  certSANs: #@ ["talos.bruner.lab"] + [addr.split("/")[0] for addr in data.values.addresses]
   kubelet:
     extraArgs:
       #! NOTE: This enables metrics server to recognize kubelet certificates
       #! https://www.talos.dev/v1.7/kubernetes-guides/configuration/deploy-metrics-server/
       rotate-server-certificates: true
   network:
-    hostname: #@ data.values.hostname
     nameservers:
       - 192.168.10.1
       - 9.9.9.9
@@ -24,3 +24,15 @@ machine:
   time:
     servers:
       - time.cloudflare.com
+cluster:
+  controlPlane:
+    endpoint: #@ "https://{}:6443".format(data.values.addresses[0].split("/")[0])
+  apiServer:
+    certSANs: #@ ["talos.bruner.lab"] + [addr.split("/")[0] for addr in data.values.addresses]
+---
+#! HostnameConfig is required in Talos v1.12+ when stableHostname is active (default).
+#! Setting auto: "off" allows an explicit hostname to be used without conflict.
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: #@ data.values.hostname
+auto: "off"

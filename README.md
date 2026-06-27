@@ -36,7 +36,7 @@ talosctl gen crt --ca ca --csr admin.csr --name admin
 vim talosconfig
 
 # Finally, generate new Kubeconfig.
-talosctl kubeconfig -n 192.168.10.20 -e ... --talosconfig ./talosconfig
+talosctl kubeconfig -n 192.168.10.21 -e ... --talosconfig ./talosconfig
 ```
 
 ## Directories

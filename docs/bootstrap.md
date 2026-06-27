@@ -53,7 +53,7 @@ $ ./scripts/apply-config.sh -b -e 192.168.10.172 -n control-02
 
 #### Worker
 
-After bootstrapping, you'll also want to generate configuration for worker nodes. These configuration files are saved in a (config/workers/)[../configs/workers/] directory.
+After bootstrapping, you'll also want to generate configuration for worker nodes. These configuration files are saved in a [config/workers/](../config/workers/) directory.
 
 ```bash
 # generate configuration to bootstrap worker nodes

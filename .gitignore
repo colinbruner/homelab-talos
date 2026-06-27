@@ -4,6 +4,6 @@
 config/*
 
 # patches/ holds hand-authored Talos config source (committed).
-# Ignore stray generated per-node directories left by the old ytt workflow.
+# Ignore stray generated per-node subdirectories (obsolete from prior workflow).
 patches/*/
 !patches/nodes/

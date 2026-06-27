@@ -2,7 +2,7 @@
 
 ## Overview
 
-The bootstrapping process is handled with 4 scripts defined in the [scripts/](./scripts) directory. This process will handle bootstrapping a single control node followed by n+ worker nodes.
+The bootstrapping process is handled with 4 scripts defined in the [scripts/](./scripts) directory. This process will handle bootstrapping three control plane nodes and six worker nodes.
 
 - [generate-config.sh][gc]
 - [apply-config.sh][ac]
@@ -14,13 +14,12 @@ The bootstrapping process is handled with 4 scripts defined in the [scripts/](./
 The scripts mention above assume a few binaries are available within your running PATH. Please ensure the following are downloaded and executable:
 
 - [talosctl](https://github.com/siderolabs/talos)
-- [ytt](https://github.com/carvel-dev/ytt)
 
 While not strictly required for bootstrapping, `kubectl` is also recommended to interact and validate the cluster after bootstrap.
 
 ## Configuration
 
-Before bootstrapping, confirm your desired configuration is set. This can be done by reviewing files in the [values](../values) and [templates/](../templates) directories.
+Before bootstrapping, confirm your desired configuration is set. This can be done by reviewing the patch files in the [patches/](../patches) directory.
 
 For more information, view [configuration](./config.md).
 
@@ -98,7 +97,7 @@ $ ./scripts/apply-config.sh -e 192.168.10.31 -n worker-01
 
 ## Control Only (bootstrapping)
 
-The following section applies only to the initial bootstrapping process of a single control node.
+The following section applies only to the initial bootstrapping process of the control plane nodes.
 
 ### Bootstrap Kubernetes
 
@@ -141,8 +140,8 @@ We can bake this into extraManifests config.. but for the first one, I'd like to
 The following will validate the health of the single node cluster and confirm you are able to authenticate and connect to it.
 
 ```bash
-# The NODE_IP should be the IP address value, typically set within values/control-01.yaml
-$ export NODE_IP="192.168.1.20"
+# The NODE_IP should be the IP address value set in patches/nodes/control-01.yaml
+$ export NODE_IP="192.168.10.21"
 $ export TALOSCONFIG=config/talosconfig
 $ talosctl -n $NODE_IP -e $NODE_IP health
 discovered nodes: ["192.168.1.20"]
@@ -180,7 +179,7 @@ waiting for all k8s nodes to report schedulable: OK
 
 ## Example Worker Setup
 
-After creating 3 values files for worker-01, worker-02, and worker-03 in the values/ directory...
+After creating per-node patch files for worker-01, worker-02, and worker-03 in the patches/nodes/ directory...
 
 ```bash
 # Generating Configurations

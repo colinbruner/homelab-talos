@@ -79,8 +79,7 @@ talosctl machineconfig patch \
 This type of patching can be handle by regenerating configuration files originally generated during [bootstrapping](./bootstrap.md).
 
 ```bash
-# Supplying '-f' will force overwrite any existing configuration files
-$ ./scripts/generate-config.sh -n worker-01 -e 192.168.1.22 -f
+$ ./scripts/generate-config.sh -n worker-01 -e 192.168.10.31
 # NOTE: Before running, I copied the original worker-01.yaml to my existing directory
 # After rerunning, we see additional changes now reflected.
 $ diff worker-01.yaml config/workers/worker-01.yaml

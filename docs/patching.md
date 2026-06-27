@@ -13,7 +13,12 @@ Talos supports two types of patches:
 - [Strategic Merge][strategic]
 - [JSON Patches (RFC6902)][rfc6902]
 
-Strategic merging allows merging 1 yaml configuration file into another. For non-array values, this typically results in the merging value `overwriting` the existing value. For array values, the merginv values are `appended` to the end of the array.
+Strategic merging merges one YAML document into another. Scalar values in the
+merging document overwrite the existing value. List behavior depends on the
+field: Talos merges *keyed* lists (e.g. `machine.network.interfaces`, matched on
+`deviceSelector`/`interface`) element-by-element, while plain scalar lists (e.g.
+`certSANs`, `nameservers`) are appended. This is why a shared interface block and
+a per-node address combine into a single interface entry.
 
 JSON Patching allows more fine grained control of various aspects of the configuration.
 
@@ -39,14 +44,19 @@ Applied configuration without a reboot
 # Target controlplane IP Address
 NODE_IP=192.168.1.10
 
-# Patch live running machineconfig (mc)
+# An RFC6902 patch gives explicit control over array elements — e.g. replacing
+# addresses rather than appending. patch.json:
+# [
+#   { "op": "replace",
+#     "path": "/machine/network/interfaces/0/addresses",
+#     "value": ["192.168.1.20/24"] }
+# ]
+
 talosctl patch mc \
   --talosconfig config/talosconfig \
   -e $NODE_IP \
   -n $NODE_IP \
-  --patch @patch.yaml
-patched MachineConfigs.config.talos.dev/v1alpha1 at the node 192.168.1.10
-Applied configuration without a reboot
+  --patch @patch.json
 ```
 
 ## Configuration File Patching

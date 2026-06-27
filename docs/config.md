@@ -1,29 +1,63 @@
 # Config
 
-Before beginning review [patching](./patching.md) to get a basic understanding of the types of patches accepted by Talos.
+Talos machine configs are assembled from plain, hand-authored YAML patches.
+There is no templating engine — `talosctl gen config` stacks the patches and
+Talos performs the merge. See [patching](./patching.md) for the merge rules.
 
-## ytt
-The following are components of [ytt](https://github.com/carvel-dev/ytt), a yaml templating tool that was use to generate Talos patches and configurations.
+## Layout
 
-### Schema
-The schema for the purposes of this configuration can be found within the [values](../values) directory, at [values/schema.yml](../values/schema.yml)
+```
+patches/
+  common-control.yaml   # static config shared by all control plane nodes
+  common-worker.yaml    # static config shared by all worker nodes
+  firewall.yaml         # host ingress firewall rules (applied to every node)
+  nodes/
+    control-01.yaml     # per-node: address, certSANs IP, hostname
+    ...
+    worker-06.yaml      # per-node: address, hostname
+```
 
-The schema defines variables can be passed in values and written to templates. 
+## How generation works
 
-For more information about writing a schema, check out ytt's documentation for [schema][schema]
+`scripts/generate-config.sh -n <node>` derives the node type from its name and
+runs:
 
-### Templates
+```
+talosctl gen config ... \
+  --config-patch-<type> @patches/common-<type>.yaml \
+  --config-patch-<type> @patches/firewall.yaml \
+  --config-patch-<type> @patches/nodes/<node>.yaml
+```
 
-The templates directory contains two sub-directories, each with two sets of templates.
-- control/strategic-patch.yaml
-- control/json-patch.yaml
-- worker/strategic-patch.yaml
-- worker/json-patch.yaml
+Patches apply in order as strategic merges. Keyed lists such as
+`machine.network.interfaces` merge by key — the shared interface block and the
+per-node address collapse into one entry — while scalar lists such as `certSANs`
+append. See [patching](./patching.md).
 
-These templates are used to generic either strategic or json patches for Talos control or worker nodes. For more information about strategic/json patching types, refer to [patching](./patching.md).
+## Per-node files
 
-### Values
+A worker file contains only what varies — address and hostname:
 
-These files define individual unique characteristics, such as IP or hostname. The files are organized by the unique 'name' of the node, ending in `.yaml`. These files should fill in the keys defined in the [schema.yml](../values/schema.yml) file.
+```yaml
+machine:
+  network:
+    interfaces:
+      - deviceSelector:
+          busPath: "0*"
+        addresses:
+          - 192.168.10.33/24
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: worker-03
+auto: "off"
+```
 
-[schema]: https://carvel.dev/ytt/docs/v0.49.x/how-to-write-schema/
+A control file additionally lists its IP in `machine.certSANs` and
+`cluster.apiServer.certSANs`.
+
+## Adding a node
+
+1. Copy an existing file in `patches/nodes/` of the same type; update the
+   address and hostname (and the certSANs IP for control nodes).
+2. Run `./scripts/generate-config.sh -n <node>`.

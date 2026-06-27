@@ -1,0 +1,25 @@
+# Static configuration shared by ALL worker nodes.
+# Per-node values (address, hostname) live in patches/nodes/<node>.yaml.
+machine:
+  kubelet:
+    extraArgs:
+      # Enables metrics-server to recognize kubelet certificates.
+      # https://www.talos.dev/v1.7/kubernetes-guides/configuration/deploy-metrics-server/
+      rotate-server-certificates: true
+  network:
+    nameservers:
+      - 192.168.10.1
+      - 9.9.9.9
+    interfaces:
+      - deviceSelector:
+          busPath: "0*" # selects the single hardware NIC
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.10.1
+  time:
+    servers:
+      - time.cloudflare.com
+cluster:
+  controlPlane:
+    endpoint: https://talos.bruner.lab:6443

@@ -1,0 +1,40 @@
+---
+# Block all ingress by default. Explicit allow rules below define permitted traffic.
+apiVersion: v1alpha1
+kind: NetworkDefaultActionConfig
+ingress: block
+---
+# Allow all TCP from trusted LAN — covers Talos API, Kubernetes API, etcd, kubelet, etc.
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: allow-lan-tcp
+portSelector:
+  ports:
+    - 1-65535
+  protocol: tcp
+ingress:
+  - subnet: 192.168.10.0/24
+  - subnet: 192.168.1.0/24
+---
+# Allow all UDP from trusted LAN — covers Flannel VXLAN (8472), DNS, etc.
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: allow-lan-udp
+portSelector:
+  ports:
+    - 1-65535
+  protocol: udp
+ingress:
+  - subnet: 192.168.10.0/24
+  - subnet: 192.168.1.0/24
+---
+# Allow node-exporter scraping from pod CIDR (Prometheus -> host port 9100)
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: allow-node-exporter-pods
+portSelector:
+  ports:
+    - 9100
+  protocol: tcp
+ingress:
+  - subnet: 10.244.0.0/16

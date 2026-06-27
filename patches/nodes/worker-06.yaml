@@ -1,0 +1,12 @@
+machine:
+  network:
+    interfaces:
+      - deviceSelector:
+          busPath: "0*"
+        addresses:
+          - 192.168.10.36/24
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: worker-06
+auto: "off"

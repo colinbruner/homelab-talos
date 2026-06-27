@@ -1,6 +1,9 @@
 .DS_Store**
 
-# generated talos configuration files
+# Generated Talos machine configs and secrets
 config/*
-# generated talos patch files
-patches/*
+
+# patches/ holds hand-authored Talos config source (committed).
+# Ignore stray generated per-node directories left by the old ytt workflow.
+patches/*/
+!patches/nodes/

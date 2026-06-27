@@ -138,7 +138,7 @@ For sequential upgrades across all workers, use the **Talos Worker Upgrade** ski
 
 - **Line endings:** Always use LF (`\n`), never CRLF (`\r\n`). This is a macOS development environment.
 - Node hostnames follow `{control,worker}-{01..09}` (zero-padded)
-- IPs: control plane starts at `.20`, workers start at `.31`
+- IPs: control plane starts at `.21`, workers start at `.31`
 - Config patches in `patches/` are hand-authored source; edit them directly. `config/` is generated output.
 - Static IPs on all nodes — no DHCP
 - All nodes share the same DNS, NTP, and gateway config

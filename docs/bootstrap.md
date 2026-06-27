@@ -105,7 +105,7 @@ Once Talos Linux is up and online, you'll need to bootstrap kubernetes. The foll
 
 ```bash
 # bootstraps the kubernetes cluster on running Talos Linux, this will only need to be done once
-$ ./scripts/bootstrap-kubernetes.sh -e 192.168.1.10
+$ ./scripts/bootstrap-kubernetes.sh -e 192.168.10.21
 ```
 
 At this point everything on the Talos dashboard should indicate healthy and running. The following step will download the Kubeconfig which will allow you to connect directly to the controlplane.
@@ -137,14 +137,14 @@ We can bake this into extraManifests config.. but for the first one, I'd like to
 
 ## Validation
 
-The following will validate the health of the single node cluster and confirm you are able to authenticate and connect to it.
+The following will validate the health of the cluster and confirm you are able to authenticate and connect to it.
 
 ```bash
 # The NODE_IP should be the IP address value set in patches/nodes/control-01.yaml
 $ export NODE_IP="192.168.10.21"
 $ export TALOSCONFIG=config/talosconfig
 $ talosctl -n $NODE_IP -e $NODE_IP health
-discovered nodes: ["192.168.1.20"]
+discovered nodes: ["192.168.10.21"]
 waiting for etcd to be healthy: ...
 waiting for etcd to be healthy: OK
 waiting for etcd members to be consistent across nodes: ...

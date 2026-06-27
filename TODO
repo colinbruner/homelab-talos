@@ -2,6 +2,6 @@
 
 ### 1. control-01 IP migration
 control-01 currently holds both 192.168.10.20 (legacy) and 192.168.10.21.
-values/control-01.yaml is already updated to .21 as primary.
+patches/nodes/control-01.yaml is already updated to .21 as primary.
 Once Talos/k8s are upgraded and configs can be applied cleanly, apply the
 updated machine config to drop the .20 address.

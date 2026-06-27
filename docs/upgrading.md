@@ -38,18 +38,18 @@ Review the the [official documentation][official-talos]:
 
 ```bash
 # Control Node
-❯ ./scripts/upgrade-talos.sh -t control -n 192.168.1.20 -v v1.8.4
+❯ ./scripts/upgrade-talos.sh -t control -n 192.168.10.21 -v v1.8.4
 Will run the following command:
-talosctl upgrade --wait --debug --nodes 192.168.1.20 --image ghcr.io/siderolabs/installer:v1.8.4 --preserve
+talosctl upgrade --wait --debug --nodes 192.168.10.21 --image ghcr.io/siderolabs/installer:v1.8.4 --preserve
 Continue? [y/N] y
-◲ watching nodes: [192.168.1.20]
-    * 192.168.1.20: waiting for actor ID
+◲ watching nodes: [192.168.10.21]
+    * 192.168.10.21: waiting for actor ID
 
 # Worker Node
-❯ ./scripts/upgrade-talos.sh -t control -n 192.168.1.32 -v v1.8.4
+❯ ./scripts/upgrade-talos.sh -t worker -n 192.168.10.31 -v v1.8.4
 ...
-watching nodes: [192.168.1.32]
-    * 192.168.1.32: post check passed
+watching nodes: [192.168.10.31]
+    * 192.168.10.31: post check passed
 ```
 
 [official-talos]: https://www.talos.dev/v1.9/talos-guides/upgrading-talos/#faqs

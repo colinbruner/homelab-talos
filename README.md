@@ -1,6 +1,6 @@
 # Talos
 
-I've documented the initial bootstrapping of a single control node + three worker nodes, all running as VMs on Proxmox.
+I've documented the initial bootstrapping of three control plane nodes and six worker nodes, all running as VMs on Proxmox.
 
 This documentation is captured below in the following components:
 
@@ -10,7 +10,9 @@ This documentation is captured below in the following components:
 - [Upgrading](./docs/upgrading.md)
 
 ## Regenerating Kubeconfig & Talosconfig
-Refer to the Talos discussion [here](https://github.com/siderolabs/talos/discussions/9457). 
+Refer to the Talos discussion [here](https://github.com/siderolabs/talos/discussions/9457).
+
+This is automated by [`scripts/regenerate-talosconfig.sh`](./scripts/regenerate-talosconfig.sh); the manual steps below are for reference.
 
 Secrets for control nodes are in 1password along with current talosconfig, secrets, and kubeconfig. However, these generated certs do expire.
 
@@ -34,17 +36,15 @@ talosctl gen crt --ca ca --csr admin.csr --name admin
 vim talosconfig
 
 # Finally, generate new Kubeconfig.
-talosctl kubeconfig -n 192.168.10.20 -e ... --talosconfig ./talosconfig
+talosctl kubeconfig -n 192.168.10.21 -e ... --talosconfig ./talosconfig
 ```
 
 ## Directories
 
 - [config](./config/): generated configuration for Talos control and worker nodes.
 - [docs](./docs/): documentation about bootstrapping and configuring Talos Linux.
-- [patches](./patches/): patches that have been geneated by [scripts](./scripts) to apply to Talos Linux.
+- [patches](./patches/): hand-authored Talos config source — `common-control.yaml`, `common-worker.yaml`, `firewall.yaml`, and per-node files under `nodes/`.
 - [scripts](./scripts/): contains scripts intended to be ran from this directory.
-- [templates](./templates/): yaml templates consumed by scripts to generate [patches](./patches/).
-- [values](./values/): files, by hostname, containing specific values for that worker or control node.
 
 ## Official Links:
 

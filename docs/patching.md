@@ -13,7 +13,12 @@ Talos supports two types of patches:
 - [Strategic Merge][strategic]
 - [JSON Patches (RFC6902)][rfc6902]
 
-Strategic merging allows merging 1 yaml configuration file into another. For non-array values, this typically results in the merging value `overwriting` the existing value. For array values, the merginv values are `appended` to the end of the array.
+Strategic merging merges one YAML document into another. Scalar values in the
+merging document overwrite the existing value. List behavior depends on the
+field: Talos merges *keyed* lists (e.g. `machine.network.interfaces`, matched on
+`deviceSelector`/`interface`) element-by-element, while plain scalar lists (e.g.
+`certSANs`, `nameservers`) are appended. This is why a shared interface block and
+a per-node address combine into a single interface entry.
 
 JSON Patching allows more fine grained control of various aspects of the configuration.
 
@@ -21,7 +26,7 @@ JSON Patching allows more fine grained control of various aspects of the configu
 
 ```bash
 # Target controlplane IP Address
-NODE_IP=192.168.1.10
+NODE_IP=192.168.10.21
 
 # Patch live running machineconfig (mc)
 talosctl patch mc \
@@ -29,7 +34,7 @@ talosctl patch mc \
   -e $NODE_IP \
   -n $NODE_IP \
   --patch @patch.yaml
-patched MachineConfigs.config.talos.dev/v1alpha1 at the node 192.168.1.10
+patched MachineConfigs.config.talos.dev/v1alpha1 at the node 192.168.10.21
 Applied configuration without a reboot
 ```
 
@@ -37,16 +42,21 @@ Applied configuration without a reboot
 
 ```bash
 # Target controlplane IP Address
-NODE_IP=192.168.1.10
+NODE_IP=192.168.10.21
 
-# Patch live running machineconfig (mc)
+# An RFC6902 patch gives explicit control over array elements — e.g. replacing
+# addresses rather than appending. patch.json:
+# [
+#   { "op": "replace",
+#     "path": "/machine/network/interfaces/0/addresses",
+#     "value": ["192.168.10.21/24"] }
+# ]
+
 talosctl patch mc \
   --talosconfig config/talosconfig \
   -e $NODE_IP \
   -n $NODE_IP \
-  --patch @patch.yaml
-patched MachineConfigs.config.talos.dev/v1alpha1 at the node 192.168.1.10
-Applied configuration without a reboot
+  --patch @patch.json
 ```
 
 ## Configuration File Patching
@@ -54,7 +64,7 @@ Applied configuration without a reboot
 This type of patching is effectively just editting a local file. These configurations changes will still need to be applied to running instance(s).
 
 ```bash
-NODE_IP=192.168.1.10 # Target controlplane IP Address
+NODE_IP=192.168.10.21 # Target controlplane IP Address
 # Patch generated machine configuration, requires local files
 talosctl machineconfig patch \
   --talosconfig config/talosconfig \
@@ -69,8 +79,7 @@ talosctl machineconfig patch \
 This type of patching can be handle by regenerating configuration files originally generated during [bootstrapping](./bootstrap.md).
 
 ```bash
-# Supplying '-f' will force overwrite any existing configuration files
-$ ./scripts/generate-config.sh -n worker-01 -e 192.168.1.22 -f
+$ ./scripts/generate-config.sh -n worker-01 -e 192.168.10.31
 # NOTE: Before running, I copied the original worker-01.yaml to my existing directory
 # After rerunning, we see additional changes now reflected.
 $ diff worker-01.yaml config/workers/worker-01.yaml

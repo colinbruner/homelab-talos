@@ -6,12 +6,11 @@
 OUTPUT_DIR="${SCRIPTPATH}/../config"
 WORKER_OUTPUT_DIR="${SCRIPTPATH}/../config/workers"
 
-TEMPLATES_DIR="${SCRIPTPATH}/../templates"
 PATCHES_DIR="${SCRIPTPATH}/../patches"
-VALUES_DIR="${SCRIPTPATH}/../values"
+NODES_DIR="${PATCHES_DIR}/nodes"
 
 SECRETS_FILE="${OUTPUT_DIR}/secrets.yaml"
-FIREWALL_TEMPLATE="${TEMPLATES_DIR}/firewall.yaml"
+FIREWALL_TEMPLATE="${PATCHES_DIR}/firewall.yaml"
 TALOSCONFIG_FILE="${OUTPUT_DIR}/talosconfig"
 KUBECONFIG_FILE="${OUTPUT_DIR}/kubeconfig"
 

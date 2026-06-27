@@ -1,0 +1,18 @@
+machine:
+  certSANs:
+    - 192.168.10.23
+  network:
+    interfaces:
+      - deviceSelector:
+          busPath: "0*"
+        addresses:
+          - 192.168.10.23/24
+cluster:
+  apiServer:
+    certSANs:
+      - 192.168.10.23
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: control-03
+auto: "off"

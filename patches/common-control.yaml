@@ -1,0 +1,33 @@
+# Static configuration shared by ALL control plane nodes.
+# Per-node values (address, certSANs IP, hostname) live in patches/nodes/<node>.yaml.
+machine:
+  certSANs:
+    - talos.bruner.lab
+  kubelet:
+    extraArgs:
+      # Enables metrics-server to recognize kubelet certificates.
+      # https://www.talos.dev/v1.7/kubernetes-guides/configuration/deploy-metrics-server/
+      rotate-server-certificates: true
+  network:
+    nameservers:
+      - 192.168.10.1
+      - 9.9.9.9
+    interfaces:
+      - deviceSelector:
+          busPath: "0*" # selects the single hardware NIC
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.10.1
+  time:
+    servers:
+      - time.cloudflare.com
+cluster:
+  controlPlane:
+    # Must be identical on every node. Talos derives the kube-apiserver
+    # --service-account-issuer / --api-audiences from this value, so a per-node
+    # endpoint causes cross-apiserver SA-token 401s. Use the shared DNS endpoint.
+    endpoint: https://talos.bruner.lab:6443
+  apiServer:
+    certSANs:
+      - talos.bruner.lab

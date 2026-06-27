@@ -1,4 +1,0 @@
-
-hostname: worker-04
-addresses: 
-  - 192.168.10.34/24

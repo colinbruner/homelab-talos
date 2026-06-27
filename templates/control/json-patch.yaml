@@ -1,3 +1,0 @@
-#@ load("@ytt:data", "data")
-#! JSON patches are not supported for multi-document machine configurations.
-#! All patch configuration belongs in strategic-patch.yaml instead.

@@ -1,4 +1,0 @@
-
-hostname: worker-05
-addresses: 
-  - 192.168.10.35/24

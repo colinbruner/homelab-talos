@@ -1,3 +1,0 @@
-#@ load("@ytt:data", "data")
-#! left empty intentionally, add json patch configuration here as necessary
----

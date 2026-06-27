@@ -35,9 +35,7 @@ The primary files generated here are `secrets.yaml`, `talosconfig`, and `control
 
 ```bash
 # generate configuration to bootstrap controlplane
-$ ./scripts/generate-config.sh -n control-01 -e 192.168.1.157 -c homelab
-creating: homelab/talos/patches/strategic-patch.yaml
-creating: homelab/talos/patches/json-patch.yaml
+$ ./scripts/generate-config.sh -n control-01 -e 192.168.10.21 -c homelab
 creating: homelab/talos/scripts/../config/secrets.yaml
 creating: homelab/talos/scripts/../config/control-01.yaml
 creating: homelab/talos/scripts/../config/talosconfig
@@ -48,8 +46,6 @@ creating: homelab/talos/scripts/../config/talosconfig
 ```bash
 # NOTE: set -e to the intended future IP address of the node
 $ ./scripts/generate-config.sh -n control-02 -e 192.168.10.22 -c homelab
-creating: homelab/talos/patches/control-02/strategic-patch.yaml
-creating: homelab/talos/patches/control-02/json-patch.yaml
 creating: homelab/talos/scripts/../config/control-02.yaml
 # NOTE: This -e is the IP address of the node at time of apply
 $ ./scripts/apply-config.sh -b -e 192.168.10.172 -n control-02
@@ -62,7 +58,6 @@ After bootstrapping, you'll also want to generate configuration for worker nodes
 ```bash
 # generate configuration to bootstrap worker nodes
 $ ./scripts/generate-config.sh -n worker-01
-creating: homelab/talos/patches/worker-01/strategic-patch.yaml
 creating: homelab/talos/scripts/../config/workers/worker-01.yaml
 ```
 
@@ -74,7 +69,7 @@ The below script will cause the initial control node to be reconfigured. After t
 
 ```bash
 # applies initial bootstrap configuration based upon a generated control-01.yaml file
-$ ./scripts/apply-config.sh -b -e 192.168.1.10 -n control-01
+$ ./scripts/apply-config.sh -b -e 192.168.10.157 -n control-01
 ```
 
 #### Worker
@@ -116,7 +111,7 @@ Now that the Talos cluster and kubernetes are both up and online, you'll need to
 
 ```bash
 # downloads the kubeconfig in the config/ directory, this file should be kept secret and save
-$ ./scripts/download-config.sh -e 192.168.1.10
+$ ./scripts/download-config.sh -e 192.168.10.21
 ```
 
 ## Errors
@@ -184,19 +179,16 @@ After creating per-node patch files for worker-01, worker-02, and worker-03 in t
 ```bash
 # Generating Configurations
 $ ./scripts/generate-config.sh -n worker-01
-creating: /home/colinbruner/code/colinbruner/homelab/talos/patches/worker-01/strategic-patch.yaml
-creating: /home/colinbruner/code/colinbruner/homelab/talos/scripts/../config/workersworker-01.yaml
+creating: /home/colinbruner/code/colinbruner/homelab/talos/scripts/../config/workers/worker-01.yaml
 $ ./scripts/generate-config.sh -n worker-02
-creating: /home/colinbruner/code/colinbruner/homelab/talos/patches/worker-02/strategic-patch.yaml
-creating: /home/colinbruner/code/colinbruner/homelab/talos/scripts/../config/workersworker-02.yaml
+creating: /home/colinbruner/code/colinbruner/homelab/talos/scripts/../config/workers/worker-02.yaml
 $ ./scripts/generate-config.sh -n worker-03
-creating: /home/colinbruner/code/colinbruner/homelab/talos/patches/worker-03/strategic-patch.yaml
-creating: /home/colinbruner/code/colinbruner/homelab/talos/scripts/../config/workersworker-03.yaml
+creating: /home/colinbruner/code/colinbruner/homelab/talos/scripts/../config/workers/worker-03.yaml
 
 # Applying Configurations
-$ ./scripts/apply-config.sh -b -e 192.168.1.22 -n worker-01
-$ ./scripts/apply-config.sh -b -e 192.168.1.176 -n worker-02
-$ ./scripts/apply-config.sh -b -e 192.168.1.173 -n worker-03
+$ ./scripts/apply-config.sh -b -e 192.168.10.201 -n worker-01
+$ ./scripts/apply-config.sh -b -e 192.168.10.202 -n worker-02
+$ ./scripts/apply-config.sh -b -e 192.168.10.203 -n worker-03
 ```
 
 [gc]: ../scripts/generate-config.sh

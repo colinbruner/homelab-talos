@@ -26,7 +26,7 @@ JSON Patching allows more fine grained control of various aspects of the configu
 
 ```bash
 # Target controlplane IP Address
-NODE_IP=192.168.1.10
+NODE_IP=192.168.10.21
 
 # Patch live running machineconfig (mc)
 talosctl patch mc \
@@ -34,7 +34,7 @@ talosctl patch mc \
   -e $NODE_IP \
   -n $NODE_IP \
   --patch @patch.yaml
-patched MachineConfigs.config.talos.dev/v1alpha1 at the node 192.168.1.10
+patched MachineConfigs.config.talos.dev/v1alpha1 at the node 192.168.10.21
 Applied configuration without a reboot
 ```
 
@@ -42,14 +42,14 @@ Applied configuration without a reboot
 
 ```bash
 # Target controlplane IP Address
-NODE_IP=192.168.1.10
+NODE_IP=192.168.10.21
 
 # An RFC6902 patch gives explicit control over array elements — e.g. replacing
 # addresses rather than appending. patch.json:
 # [
 #   { "op": "replace",
 #     "path": "/machine/network/interfaces/0/addresses",
-#     "value": ["192.168.1.20/24"] }
+#     "value": ["192.168.10.21/24"] }
 # ]
 
 talosctl patch mc \
@@ -64,7 +64,7 @@ talosctl patch mc \
 This type of patching is effectively just editting a local file. These configurations changes will still need to be applied to running instance(s).
 
 ```bash
-NODE_IP=192.168.1.10 # Target controlplane IP Address
+NODE_IP=192.168.10.21 # Target controlplane IP Address
 # Patch generated machine configuration, requires local files
 talosctl machineconfig patch \
   --talosconfig config/talosconfig \

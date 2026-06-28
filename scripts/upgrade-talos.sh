@@ -9,7 +9,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 IMAGE="ghcr.io/siderolabs/installer"
 
 usage() {
-    echo "Usage: $0 -t <control|worker> -n <node-ip> -v <version> [-y]" 1>&2
+    echo "Usage: $0 -t <control|worker> -n <node-ip> -v <version> [-y] [-w]" 1>&2
     echo "" 1>&2
     echo "  -t  Node type: control or worker" 1>&2
     echo "  -n  Node IP address (e.g. 192.168.10.31)" 1>&2

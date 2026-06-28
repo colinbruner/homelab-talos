@@ -87,13 +87,21 @@ jobs:
             echo "::error::DEFAULT_TALOS_VERSION not found in scripts/lib/consts.sh"
             exit 1
           fi
+          # Constrain to strict semver so the value is safe to use downstream.
+          if ! echo "$version" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::DEFAULT_TALOS_VERSION '$version' is not a vX.Y.Z version"
+            exit 1
+          fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "Using talosctl $version"
 
       - name: install talosctl
+        env:
+          # Read via env (not ${{ }} interpolation) so bash, not the GHA
+          # templater, consumes the value — avoids script injection.
+          TALOS_VERSION: ${{ steps.talos.outputs.version }}
         run: |
-          version="${{ steps.talos.outputs.version }}"
-          url="https://github.com/siderolabs/talos/releases/download/${version}/talosctl-linux-amd64"
+          url="https://github.com/siderolabs/talos/releases/download/${TALOS_VERSION}/talosctl-linux-amd64"
           curl -sfL "$url" -o talosctl
           sudo install -m 0755 talosctl /usr/local/bin/talosctl
           talosctl version --client
@@ -120,3 +128,16 @@ jobs:
             talosctl validate -c "$f" -m metal
           done
           echo "all ${#configs[@]} configs valid"
+
+  secret-scan:
+    name: gitleaks secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

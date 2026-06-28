@@ -72,3 +72,51 @@ jobs:
           # resources/ recurses into metrics-server (which pulls remote bases).
           kustomize build resources/ > /dev/null
           echo "kustomize build succeeded"
+
+  talos-validate:
+    name: talos config validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: read pinned talos version
+        id: talos
+        run: |
+          version="$(grep -E '^DEFAULT_TALOS_VERSION="' scripts/lib/consts.sh | cut -d'"' -f2)"
+          if [ -z "$version" ]; then
+            echo "::error::DEFAULT_TALOS_VERSION not found in scripts/lib/consts.sh"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Using talosctl $version"
+
+      - name: install talosctl
+        run: |
+          version="${{ steps.talos.outputs.version }}"
+          url="https://github.com/siderolabs/talos/releases/download/${version}/talosctl-linux-amd64"
+          curl -sfL "$url" -o talosctl
+          sudo install -m 0755 talosctl /usr/local/bin/talosctl
+          talosctl version --client
+
+      - name: generate configs for all nodes
+        run: |
+          for node in control-01 control-02 control-03 \
+                      worker-01 worker-02 worker-03 worker-04 worker-05 worker-06; do
+            echo "::group::generate $node"
+            ./scripts/generate-config.sh -n "$node"
+            echo "::endgroup::"
+          done
+
+      - name: validate generated configs
+        run: |
+          shopt -s nullglob
+          configs=(config/control-*.yaml config/workers/worker-*.yaml)
+          if [ "${#configs[@]}" -ne 9 ]; then
+            echo "::error::expected 9 configs, found ${#configs[@]}: ${configs[*]}"
+            exit 1
+          fi
+          for f in "${configs[@]}"; do
+            echo "validating $f"
+            talosctl validate -c "$f" -m metal
+          done
+          echo "all ${#configs[@]} configs valid"

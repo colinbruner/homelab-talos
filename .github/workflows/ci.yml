@@ -1,0 +1,56 @@
+---
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint (shell / yaml / markdown)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: shellcheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        env:
+          SHELLCHECK_OPTS: -x
+
+      - name: shfmt
+        uses: mfinelli/setup-shfmt@v3
+      - name: shfmt diff check
+        run: shfmt -d scripts resources
+
+      - name: yamllint
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_file: .yamllint.yaml
+          file_or_dir: patches resources
+
+      - name: markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          # Rules, globs, and ignores are auto-discovered from .markdownlint-cli2.yaml.
+          globs: "**/*.md"
+
+      - name: line endings (LF only)
+        run: |
+          if git -c core.quotepath=off grep -lI $'\r' -- . ; then
+            echo "::error::CRLF line endings detected in the files above"
+            exit 1
+          fi
+          echo "All tracked text files use LF."
+
+      - name: actionlint
+        uses: raven-actions/actionlint@v2

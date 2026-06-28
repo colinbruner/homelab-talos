@@ -54,3 +54,21 @@ jobs:
 
       - name: actionlint
         uses: raven-actions/actionlint@v2
+
+  kustomize:
+    name: kustomize build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install kustomize
+        run: |
+          curl -sfL "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+          sudo install -m 0755 kustomize /usr/local/bin/kustomize
+          kustomize version
+
+      - name: build manifests
+        run: |
+          # resources/ recurses into metrics-server (which pulls remote bases).
+          kustomize build resources/ > /dev/null
+          echo "kustomize build succeeded"

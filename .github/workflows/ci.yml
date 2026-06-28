@@ -22,29 +22,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Each lint check runs even if an earlier one failed (if: always()), so a
+      # contributor sees every failure in one run instead of red-fix-red cycles.
       - name: shellcheck
+        if: always()
         uses: ludeeus/action-shellcheck@2.0.0
         env:
           SHELLCHECK_OPTS: -x
 
       - name: shfmt
+        if: always()
         uses: mfinelli/setup-shfmt@v3
       - name: shfmt diff check
+        if: always()
         run: shfmt -d scripts resources
 
       - name: yamllint
+        if: always()
         uses: ibiqlik/action-yamllint@v3
         with:
           config_file: .yamllint.yaml
           file_or_dir: patches resources
 
       - name: markdownlint
+        if: always()
         uses: DavidAnson/markdownlint-cli2-action@v16
         with:
           # Rules, globs, and ignores are auto-discovered from .markdownlint-cli2.yaml.
           globs: "**/*.md"
 
       - name: line endings (LF only)
+        if: always()
         run: |
           if git -c core.quotepath=off grep -lI $'\r' -- . ; then
             echo "::error::CRLF line endings detected in the files above"
@@ -53,6 +61,7 @@ jobs:
           echo "All tracked text files use LF."
 
       - name: actionlint
+        if: always()
         uses: raven-actions/actionlint@v2
 
   kustomize:

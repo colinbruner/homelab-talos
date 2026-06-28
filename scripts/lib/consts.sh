@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2034  # sourced library; variables are consumed by scripts that source it
 
 ###
 # Files

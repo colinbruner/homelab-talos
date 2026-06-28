@@ -289,9 +289,8 @@ jobs:
       - name: markdownlint
         uses: DavidAnson/markdownlint-cli2-action@v16
         with:
-          globs: |
-            **/*.md
-            #node_modules
+          # Rules, globs, and ignores are auto-discovered from .markdownlint-cli2.yaml.
+          globs: "**/*.md"
 
       - name: line endings (LF only)
         run: |

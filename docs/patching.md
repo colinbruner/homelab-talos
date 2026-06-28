@@ -1,6 +1,6 @@
 # Patching
 
-For full documentation and some examples, see [patching][patching].
+For full documentation and some examples, see [patching](https://www.talos.dev/v1.7/talos-guides/configuration/patching/).
 
 ## Live Machines
 

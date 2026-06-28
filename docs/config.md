@@ -6,7 +6,7 @@ Talos performs the merge. See [patching](./patching.md) for the merge rules.
 
 ## Layout
 
-```
+```text
 patches/
   common-control.yaml   # static config shared by all control plane nodes
   common-worker.yaml    # static config shared by all worker nodes
@@ -22,7 +22,7 @@ patches/
 `scripts/generate-config.sh -n <node>` derives the node type from its name and
 runs:
 
-```
+```bash
 talosctl gen config ... \
   --config-patch-<type> @patches/common-<type>.yaml \
   --config-patch-<type> @patches/firewall.yaml \

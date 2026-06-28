@@ -1,0 +1,3 @@
+# Follow sourced files (e.g. scripts/lib/consts.sh) during analysis.
+external-sources=true
+source-path=SCRIPTDIR

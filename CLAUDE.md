@@ -28,7 +28,7 @@ This repository manages a **Talos Linux Kubernetes cluster** running on Proxmox 
 
 ## Repository Structure
 
-```
+```text
 .
 ├── config/          # Generated Talos machine configs and TLS certs (gitignored secrets)
 ├── docs/            # Guides: bootstrap, config, patching, upgrading

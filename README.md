@@ -10,13 +10,15 @@ This documentation is captured below in the following components:
 - [Upgrading](./docs/upgrading.md)
 
 ## Regenerating Kubeconfig & Talosconfig
-Refer to the Talos discussion [here](https://github.com/siderolabs/talos/discussions/9457).
+
+Refer to the [Talos discussion on credential regeneration](https://github.com/siderolabs/talos/discussions/9457).
 
 This is automated by [`scripts/regenerate-talosconfig.sh`](./scripts/regenerate-talosconfig.sh); the manual steps below are for reference.
 
 Secrets for control nodes are in 1password along with current talosconfig, secrets, and kubeconfig. However, these generated certs do expire.
 
 Overview as follows:
+
 ```bash
 # OSX
 # Extract the CA cert + key from the control plane config
@@ -46,7 +48,7 @@ talosctl kubeconfig -n 192.168.10.21 -e ... --talosconfig ./talosconfig
 - [patches](./patches/): hand-authored Talos config source — `common-control.yaml`, `common-worker.yaml`, `firewall.yaml`, and per-node files under `nodes/`.
 - [scripts](./scripts/): contains scripts intended to be ran from this directory.
 
-## Official Links:
+## Official Links
 
 - [Applying Configuration][apply]
 - [Patching][patching]

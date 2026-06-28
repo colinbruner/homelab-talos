@@ -1,0 +1,13 @@
+# Gitleaks configuration — extends the built-in default ruleset.
+[extend]
+useDefault = true
+
+# Allowlist a single historical false positive: a base64 example value
+# (decodes to the placeholder "super-secret!") in a now-deleted 1Password
+# README at k8s/1password/REAMD.me. It is documentation, not a live credential.
+# Scoped narrowly to that path so real secrets are still caught everywhere else.
+[allowlist]
+description = "Historical documentation placeholder, not a real secret"
+paths = [
+  '''k8s/1password/REAMD\.me''',
+]

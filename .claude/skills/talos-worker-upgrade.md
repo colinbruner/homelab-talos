@@ -5,6 +5,7 @@ Upgrade Talos OS sequentially across all cluster nodes using `./scripts/upgrade-
 ## Instructions
 
 When the user invokes this skill, ask for any missing arguments:
+
 - **Talos version** to upgrade to (e.g. `v1.9.4`) — this is the only required input
 
 Node IPs are auto-discovered from the live cluster (no manual IP list needed).
@@ -29,7 +30,8 @@ kubectl get nodes -l '!node-role.kubernetes.io/control-plane' \
 ```
 
 Display the discovered lists to the user:
-```
+
+```text
 Discovered control plane nodes: 192.168.10.20, 192.168.10.22, 192.168.10.23
 Discovered worker nodes:        192.168.10.31, 192.168.10.32, ...
 ```
@@ -39,6 +41,7 @@ Confirm with the user before proceeding.
 ### Step 3: Upgrade — Control Plane First, Then Workers
 
 Process nodes in this order:
+
 1. Control plane nodes (sorted by IP)
 2. Worker nodes (sorted by IP)
 
@@ -66,9 +69,11 @@ kubectl get nodes -o wide --no-headers | grep <NODE_IP>
 Poll every **10 seconds**, up to **120 seconds**. The node must show `Ready` status before proceeding to the next node.
 
 Alternatively (or additionally), check via:
+
 ```bash
 talosctl get members -o json
 ```
+
 Verify the member entry for `<NODE_IP>` has `operatingSystem` populated.
 
 **If validation times out**, stop and do not continue to remaining nodes.
@@ -76,9 +81,11 @@ Verify the member entry for `<NODE_IP>` has `operatingSystem` populated.
 ### Step 4: Failure Handling
 
 If any node fails (non-zero exit or validation timeout):
+
 - Report which node failed and show relevant error output
 - Do not continue to subsequent nodes
 - Suggest diagnostics:
+
   ```bash
   talosctl dmesg --nodes <NODE_IP>
   talosctl logs --nodes <NODE_IP>
@@ -88,7 +95,7 @@ If any node fails (non-zero exit or validation timeout):
 
 After all nodes complete (or on first failure), print a summary table:
 
-```
+```text
 Node            | Type    | IP              | Result
 ----------------|---------|-----------------|--------
 control-01      | control | 192.168.10.20   | OK

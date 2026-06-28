@@ -32,4 +32,4 @@ Verify the endpoint on a running node:
 talosctl -n 192.168.10.31 get machineconfig -o yaml | grep -A 1 "endpoint:"
 ```
 
-**Reference:** https://github.com/siderolabs/talos/issues/9147#issuecomment-2332549152
+**Reference:** <https://github.com/siderolabs/talos/issues/9147#issuecomment-2332549152>

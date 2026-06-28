@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2034  # sourced library; variables are consumed by scripts that source it
 
 ###
 # Files
@@ -25,3 +26,5 @@ DEFAULT_CLUSTER_ENDPOINT="talos.bruner.lab"
 # three control IPs makes upgrade-k8s hang. control-01 is the cluster's first control node.
 DEFAULT_CONTROL_NODE="192.168.10.21"
 DEFAULT_KUBERNETES_VERSION="1.36.2"
+# Talos OS version — single source of truth for upgrade-talos.sh defaults and CI.
+DEFAULT_TALOS_VERSION="v1.13.5"

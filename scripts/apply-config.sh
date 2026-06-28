@@ -8,36 +8,39 @@
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
-. ${SCRIPTPATH}/lib/consts.sh
+. "${SCRIPTPATH}"/lib/consts.sh
 
-usage() { echo "Usage: $0 [-e <endpoint>] [-n <name>] [-b] [-d]" 1>&2; exit 1; }
+usage() {
+  echo "Usage: $0 [-e <endpoint>] [-n <name>] [-b] [-d]" 1>&2
+  exit 1
+}
 
 EXTRA_ARGS=""
 while getopts ":t:e:n:bd" o; do
-    case "${o}" in
-        e)
-            e=${OPTARG}
-            ;;
-        n)
-            n=${OPTARG}
-            ;;
-        b)
-            # During initial bootstrapping, --insecure must be passed
-            EXTRA_ARGS="--insecure "
-            ;;
-        d)
-            # Dry-run: show diff without applying
-            EXTRA_ARGS+="--dry-run "
-            ;;
-        *)
-            usage
-            ;;
-    esac
+  case "${o}" in
+  e)
+    e=${OPTARG}
+    ;;
+  n)
+    n=${OPTARG}
+    ;;
+  b)
+    # During initial bootstrapping, --insecure must be passed
+    EXTRA_ARGS="--insecure "
+    ;;
+  d)
+    # Dry-run: show diff without applying
+    EXTRA_ARGS+="--dry-run "
+    ;;
+  *)
+    usage
+    ;;
+  esac
 done
-shift $((OPTIND-1))
+shift $((OPTIND - 1))
 
 if [ -z "${e}" ] || [ -z "${n}" ]; then
-    usage
+  usage
 fi
 
 NODE_IP=$e
@@ -52,7 +55,8 @@ else
   exit 1
 fi
 
+# shellcheck disable=SC2086 # EXTRA_ARGS is a flag list that must word-split
 talosctl apply-config \
-  -n $NODE_IP \
+  -n "$NODE_IP" \
   $EXTRA_ARGS \
-  --file ${TARGET_OUTPUT_DIR}/${NODE_NAME}.yaml
+  --file "${TARGET_OUTPUT_DIR}/${NODE_NAME}.yaml"

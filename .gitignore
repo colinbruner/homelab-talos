@@ -7,3 +7,6 @@ config/*
 # Ignore stray generated per-node subdirectories (obsolete from prior workflow).
 patches/*/
 !patches/nodes/
+
+# Subagent-driven-development scratch (briefs, reports, review diffs, ledger).
+.superpowers/

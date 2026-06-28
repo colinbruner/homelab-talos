@@ -65,7 +65,7 @@ creating: homelab/talos/scripts/../config/workers/worker-01.yaml
 
 Running the below script from the [talos/](../) directory will apply configuration and begin bootstrapping a Talos cluster control node.
 
-The below script will cause the initial control node to be reconfigured. After this happens, the node will remain in a 'Booting' stage with 'Ready' indicating `False`, until the following bootstrap configurations can be applied. Refer to [Bootstrap Kubernetes][#bootstrap kubernetes] section below.
+The below script will cause the initial control node to be reconfigured. After this happens, the node will remain in a 'Booting' stage with 'Ready' indicating `False`, until the following bootstrap configurations can be applied. Refer to [Bootstrap Kubernetes](#bootstrap-kubernetes) section below.
 
 ```bash
 # applies initial bootstrap configuration based upon a generated control-01.yaml file
@@ -116,10 +116,10 @@ $ ./scripts/download-config.sh -e 192.168.10.21
 
 ## Errors
 
-Reference [metrics-server][../k8s/metrics-server] README.md
+Reference [metrics-server](../resources/metrics-server/) README.md
 
 If any kubelet CSR errors are observed, refer to the following link:
-https://www.talos.dev/v1.9/kubernetes-guides/configuration/deploy-metrics-server/#node-configuration
+<https://www.talos.dev/v1.9/kubernetes-guides/configuration/deploy-metrics-server/#node-configuration>
 
 The fix is essentially:
 

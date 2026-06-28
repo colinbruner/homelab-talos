@@ -15,6 +15,7 @@ usage() {
     echo "  -n  Node IP address (e.g. 192.168.10.31)" 1>&2
     echo "  -v  Talos version (e.g. v1.9.4)" 1>&2
     echo "  -y  Skip confirmation prompt (non-interactive mode)" 1>&2
+    echo "  -w  No-wait mode: omit --wait/--debug (for slow nodes that drop the watch with too_many_pings); poll node status manually afterward" 1>&2
     echo "" 1>&2
     echo "Environment variables:" 1>&2
     echo "  TALOS_UPGRADE_YES=1  Same as -y (skip confirmation)" 1>&2
@@ -23,8 +24,9 @@ usage() {
 
 # Non-interactive mode: flag or env var
 AUTO_APPROVE="${TALOS_UPGRADE_YES:-0}"
+NO_WAIT=0
 
-while getopts ":t:n:v:y" o; do
+while getopts ":t:n:v:yw" o; do
     case "${o}" in
         t)
             t=${OPTARG}
@@ -37,6 +39,9 @@ while getopts ":t:n:v:y" o; do
             ;;
         y)
             AUTO_APPROVE=1
+            ;;
+        w)
+            NO_WAIT=1
             ;;
         *)
             usage
@@ -78,7 +83,10 @@ NODE_IP=$n
 IMAGE_VERSION=$v
 
 # Build command as an array for safe execution
-CMD=(talosctl upgrade --wait --debug --nodes "${NODE_IP}" --image "${IMAGE}:${IMAGE_VERSION}")
+CMD=(talosctl upgrade --nodes "${NODE_IP}" --image "${IMAGE}:${IMAGE_VERSION}")
+if [[ "$NO_WAIT" != "1" ]]; then
+    CMD+=(--wait --debug)
+fi
 if [[ "$NODE_TYPE" == "control" ]]; then
     # NOTE: --preserve is required for control plane upgrades
     CMD+=(--preserve)
@@ -102,3 +110,7 @@ else
 fi
 
 "${CMD[@]}"
+if [[ "$NO_WAIT" == "1" ]]; then
+    echo "No-wait upgrade issued for ${NODE_IP}. Poll status with:"
+    echo "  kubectl get nodes -o wide | grep ${NODE_IP}"
+fi

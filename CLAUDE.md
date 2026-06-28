@@ -106,7 +106,7 @@ Config is built from hand-authored static YAML patches stacked by `talosctl gen 
 
 ## Upgrading Talos OS
 
-Upgrades are done **one node at a time** using `upgrade-talos.sh`. Always upgrade workers before control plane nodes. See `docs/upgrading.md` for full details.
+Upgrades are done **one node at a time** using `upgrade-talos.sh`. Always upgrade control plane nodes before workers (matches `docs/upgrading.md` and the `talos-worker-upgrade` skill). See `docs/upgrading.md` for full details.
 
 ```bash
 # Upgrade a single worker

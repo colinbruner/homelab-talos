@@ -10,10 +10,10 @@ Review the the [official documentation][official-k8s]:
 
 ```bash
 # See diff of changes, no real changes made.. dryrun
-talosctl --nodes control-01 upgrade-k8s --to 1.32.0 --dry-run
+talosctl --nodes control-01 upgrade-k8s --to 1.36.2 --dry-run
 
-# Automated upgrade of control & workers to 1.32.0
-talosctl --nodes control-01 upgrade-k8s --to 1.32.0
+# Automated upgrade of control & workers to 1.36.2
+talosctl --nodes control-01 upgrade-k8s --to 1.36.2
 ```
 
 ## Talos
@@ -38,19 +38,19 @@ Review the the [official documentation][official-talos]:
 
 ```bash
 # Control Node
-❯ ./scripts/upgrade-talos.sh -t control -n 192.168.10.21 -v v1.8.4
+❯ ./scripts/upgrade-talos.sh -t control -n 192.168.10.21 -v v1.13.5
 Will run the following command:
-talosctl upgrade --wait --debug --nodes 192.168.10.21 --image ghcr.io/siderolabs/installer:v1.8.4 --preserve
+talosctl upgrade --wait --debug --nodes 192.168.10.21 --image ghcr.io/siderolabs/installer:v1.13.5 --preserve
 Continue? [y/N] y
 ◲ watching nodes: [192.168.10.21]
     * 192.168.10.21: waiting for actor ID
 
 # Worker Node
-❯ ./scripts/upgrade-talos.sh -t worker -n 192.168.10.31 -v v1.8.4
+❯ ./scripts/upgrade-talos.sh -t worker -n 192.168.10.31 -v v1.13.5
 ...
 watching nodes: [192.168.10.31]
     * 192.168.10.31: post check passed
 ```
 
-[official-talos]: https://www.talos.dev/v1.9/talos-guides/upgrading-talos/#faqs
-[official-k8s]: https://www.talos.dev/v1.9/kubernetes-guides/upgrading-kubernetes/
+[official-talos]: https://www.talos.dev/v1.13/talos-guides/upgrading-talos/#faqs
+[official-k8s]: https://www.talos.dev/v1.13/kubernetes-guides/upgrading-kubernetes/

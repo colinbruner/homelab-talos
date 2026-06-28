@@ -10,7 +10,7 @@ usage() {
     echo "Usage: $0 -v <version> [-e <endpoint>] [-d] [-y]" 1>&2
     echo "" 1>&2
     echo "  -v  Kubernetes version (e.g. 1.32.0) — required" 1>&2
-    echo "  -e  Control plane endpoint: IP or hostname (default: ${DEFAULT_CLUSTER_ENDPOINT})" 1>&2
+    echo "  -e  Single control-plane node (IP or hostname) to run the upgrade from (default: ${DEFAULT_CONTROL_NODE})" 1>&2
     echo "  -d  Dry-run mode (preview changes only)" 1>&2
     echo "  -y  Skip confirmation prompt (non-interactive mode)" 1>&2
     echo "" 1>&2
@@ -22,7 +22,7 @@ usage() {
 # Non-interactive mode: flag or env var
 AUTO_APPROVE="${K8S_UPGRADE_YES:-0}"
 DRY_RUN=0
-NODE_ENDPOINT="${DEFAULT_CLUSTER_ENDPOINT}"
+NODE_ENDPOINT="${DEFAULT_CONTROL_NODE}"
 
 while getopts ":v:e:dy" o; do
     case "${o}" in

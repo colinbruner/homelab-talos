@@ -40,7 +40,7 @@ Review the the [official documentation][official-talos]:
 # Control Node
 ❯ ./scripts/upgrade-talos.sh -t control -n 192.168.10.21 -v v1.13.5
 Will run the following command:
-talosctl upgrade --wait --debug --nodes 192.168.10.21 --image ghcr.io/siderolabs/installer:v1.13.5 --preserve
+talosctl upgrade --nodes 192.168.10.21 --image ghcr.io/siderolabs/installer:v1.13.5 --wait --debug --preserve
 Continue? [y/N] y
 ◲ watching nodes: [192.168.10.21]
     * 192.168.10.21: waiting for actor ID
